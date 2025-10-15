@@ -38,6 +38,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+pnpm-workspace.yaml
+pnpm-lock.yaml
+
 logs/
 debug/
 .pnpm-debug.log*
