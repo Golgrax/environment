@@ -10,7 +10,6 @@ OUTPUT_PATHS=(
   "${PWD}/build/index.cjs.map"
   "${PWD}/build/index.d.ts"
   "${PWD}/build/index.d.cts"
-  "${PWD}/build/types"
 )
 
 YELLOW="\033[1;33m"
