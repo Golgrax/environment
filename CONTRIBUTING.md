@@ -8,6 +8,9 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 ## How Can I Contribute?
 
+First of all, make sure you have [Node.js](https://nodejs.org/) installed on your system.
+We use `pnpm` as our package manager.
+
 ### Reporting Bugs
 
 Before creating bug reports, please check [existing issues](https://github.com/octovel/.github/issues) to see if the problem has already been reported.
