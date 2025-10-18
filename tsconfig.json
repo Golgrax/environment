@@ -12,16 +12,13 @@
     "declarationMap": true,
     "sourceMap": true,
     "strict": true,
-    "removeComments": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./source/*"]
-    },
-    "composite": true,
-    "declarationDir": "build/types"
+    }
   },
   "include": ["source/**/*.ts", "tsup.config.ts"],
   "exclude": ["node_modules", "build", "**/__tests__/*", "mocks"]
