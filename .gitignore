@@ -24,9 +24,6 @@ playwright/.cache/
 *.env
 *.env.*
 
-yarn.lock
-package-lock.json
-
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -39,7 +36,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 pnpm-workspace.yaml
-pnpm-lock.yaml
 
 logs/
 debug/
