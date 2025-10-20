@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 
 import { EncryptionAlgorithm } from "@/types/encryption";
-import type { IEnvironmentSchema } from "@/types/environment";
+import type { IEnvironmentSchema } from "@/types/process";
 import type {
   HookType,
   IProcessManager,
