@@ -1,0 +1,5 @@
+# All files owned by Core Developers team
+*       @octovel/cto-leadership
+
+# CI/CD workflows owned by CI/CD & DevOps team
+.github/workflows/*   @octovel/chief    @octovel/cto-leadership
