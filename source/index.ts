@@ -1,5 +1,5 @@
 // Classes
-export * from "@/classes/ProcessManager";
+export * from "@/classes/process/ProcessManager";
 
 // Types
 export * from "@/types/environment";
