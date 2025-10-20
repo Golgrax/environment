@@ -6,7 +6,12 @@ import type {
 import type { IProcessControllerOptions } from "@/types/process";
 
 /**
- * An interface representing the structure of the main `ProcessController` class.
+ * This interface represents the structure and implementation of the `ProcessController` class.
+ *
+ * @template P - The type of the Node.js ChildProcess instance.
+ * @template O - The type of the controller options.
+ *
+ * @internal This interface is used internally and is not intended for external use.
  */
 interface IProcessController<
   P extends ChildProcess,
