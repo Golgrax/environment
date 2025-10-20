@@ -7,22 +7,22 @@ import type { IEnvironmentSchema } from "@/types/process";
 export type HookType = "add" | "delete" | "update" | "clear" | "change";
 
 /**
- * An interface representing the structure of the main `ProcessManager` class.
+ * This interface represents the structure and implementation of the `ProcessManager` class.
+ *
+ * @template S The interface representing the schema of the environment variables.
+ *
+ * @internal This interface is used internally and is not intended for external use.
  */
 interface IProcessManager<S extends IEnvironmentSchema> {
-  // _hooks: Record<HookType, Array<HookCallback<S>>>;
-  // _snapshot: Partial<S>;
-  // _temporary: Map<keyof S, TemporaryValue<keyof S, S[keyof S] | undefined>>;
-
   //#region Base methods
   set<K extends keyof S>(key: K, value: S[K]): S[K] | undefined;
   get<K extends keyof S>(
     key: K,
     options?: { fallback?: S[K] | undefined },
   ): S[K] | undefined;
+
   has<K extends keyof S>(key: K): boolean;
   delete<K extends keyof S>(key: K): S[K] | undefined;
-
   list(options: { includeValue: true }): Record<keyof S, S[keyof S]>;
   list(options?: { includeValue?: false }): Array<keyof S>;
   listKeys(): Array<keyof S>;
@@ -30,6 +30,7 @@ interface IProcessManager<S extends IEnvironmentSchema> {
   filterKeys(
     predicate: (key: keyof S, value: S[keyof S]) => boolean,
   ): Array<keyof S>;
+
   filterValues(
     predicate: (value: S[keyof S], key: keyof S) => boolean,
   ): Array<S[keyof S]>;
@@ -106,6 +107,7 @@ interface IProcessManager<S extends IEnvironmentSchema> {
     key: K,
     compute: (key: K) => S[K] | Promise<S[K]>,
   ): S[K] | Promise<S[K]>;
+
   increment<K extends keyof S>(key: K, delta: number): S[K] | undefined;
   decrement<K extends keyof S>(key: K, delta: number): S[K] | undefined;
   compute<K extends keyof S>(
