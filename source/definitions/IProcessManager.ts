@@ -12,7 +12,7 @@ export type HookType = "add" | "delete" | "update" | "clear" | "change";
 interface IProcessManager<S extends IEnvironmentSchema> {
   // _hooks: Record<HookType, Array<HookCallback<S>>>;
   // _snapshot: Partial<S>;
-  // _temporary: Map<keyof S, TemporaryValue<S>>;
+  // _temporary: Map<keyof S, TemporaryValue<keyof S, S[keyof S] | undefined>>;
 
   //#region Base methods
   set<K extends keyof S>(key: K, value: S[K]): S[K] | undefined;
