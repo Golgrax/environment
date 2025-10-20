@@ -1,13 +1,13 @@
 import { EncryptionAlgorithm } from "@/types/encryption";
-import type { IEnvironmentSchema } from "@/types/environment";
+import type { IEnvironmentSchema } from "@/types/process";
 
 /**
- * A type representing the different types of hooks that can be triggered by the `EnvironmentManager` class.
+ * A type representing the different types of hooks that can be triggered by the `ProcessManager` class.
  */
 export type HookType = "add" | "delete" | "update" | "clear" | "change";
 
 /**
- * An interface representing the structure of the main `EnvironmentManager` class.
+ * An interface representing the structure of the main `ProcessManager` class.
  */
 interface IProcessManager<S extends IEnvironmentSchema> {
   // _hooks: Record<HookType, Array<HookCallback<S>>>;
