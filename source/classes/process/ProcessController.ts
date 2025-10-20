@@ -8,15 +8,11 @@ import type { IProcessControllerOptions } from "@/types/process";
 import type { IProcessController } from "@/definitions/process/IProcessController";
 
 /**
- * A type-safe and flexible process controller.
+ * A class that provides methods for managing active processes.
  *
- * Provides features such as:
- * - Process spawning with customizable options
- * - Graceful stopping and restarting of processes
- * - Runtime status checks for process health
- *
- * @template P - Type of the process instance (default: ChildProcess).
- * @template O - Type of the options object (default: ProcessOptions).
+ * @template P - Type of the process instance.
+ * @template O - Type of the options object.
+ * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-controller.md)
  */
 class ProcessController<P extends ChildProcess>
   implements IProcessController<P>
@@ -25,13 +21,10 @@ class ProcessController<P extends ChildProcess>
   /**
    * Starts a new child process with the given command and arguments.
    *
-   * Internally uses Node's {@link spawn} function. The process inherits the parent
-   * `stdio` by default, allowing the output to be displayed directly in the console.
-   *
-   * @param command - The executable command to run (e.g., `"node"` or `"npm"`).
+   * @param command - The executable command to run.
    * @param args - A readonly array of string arguments to pass to the command.
-   * @param options - Optional {@link ProcessOptions} controlling spawn behavior.
-   * @returns The newly created {@link ChildProcess} instance.
+   * @param options - Optional options controlling spawn behavior.
+   * @returns The newly created `ChildProcessWithoutNullStreams` instance.
    */
   public start(
     command: string,
@@ -54,10 +47,7 @@ class ProcessController<P extends ChildProcess>
   /**
    * Attempts to stop a running process gracefully by sending it a termination signal.
    *
-   * If no signal is specified, `"SIGTERM"` is used by default.
-   * Returns `true` if the signal was successfully sent, or `false` if it failed.
-   *
-   * @param process - The {@link ChildProcess} instance to terminate.
+   * @param process - The `ChildProcess` instance to terminate.
    * @param signal - The termination signal to send (default: `"SIGTERM"`).
    * @returns Whether the termination signal was successfully delivered.
    */
@@ -96,10 +86,6 @@ class ProcessController<P extends ChildProcess>
 
   /**
    * Checks whether a given process is currently alive.
-   *
-   * Uses the `kill(pid, 0)` trick, which doesn’t terminate the process but
-   * throws an error if it doesn’t exist. This makes it a **safe and cross-platform**
-   * way to determine process liveness.
    *
    * @param process - The {@link ChildProcess} instance to inspect.
    * @returns `true` if the process is alive, `false` otherwise.
