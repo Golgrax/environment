@@ -72,13 +72,59 @@ export interface IEnvironmentSchema {
 }
 
 /**
- * An interface representing
+ * An interface representing the options for a process controller.
  */
 export interface IProcessControllerOptions {
+  /** The working directory for the process. */
   cwd?: string;
+  /** The environment variables for the process. */
   env?: NodeJS.ProcessEnv;
+  /** The detached state of the process. */
   detached?: boolean;
+  /** The restartOnFail state of the process. */
   restartOnFail?: boolean;
+  /** The autoRestart state of the process. */
   autoRestart?: boolean;
+  /** The maximum number of restarts for the process. */
   maxRestarts?: number;
+}
+
+/**
+ * An interface representing the information about a process.
+ */
+export interface IProcessInfo {
+  /** The process ID. */
+  pid: number;
+  /** The command used to start the process. */
+  command: string;
+  /** The arguments used to start the process. */
+  args: string[];
+  /** The status of the process. */
+  status: ProcessStatus;
+  /** The date and time when the process was started. */
+  startedAt: Date | number;
+  /** The date and time when the process was stopped. */
+  stoppedAt?: Date | number;
+  /** The exit code of the process. */
+  exitCode?: number | null;
+  /** The CPU usage of the process. */
+  cpuUsage?: NodeJS.CpuUsage;
+  /** The memory usage of the process. */
+  memoryUsage?: NodeJS.MemoryUsage;
+  /** The environment variables of the process. */
+  environment?: Record<string, string>;
+}
+
+/**
+ * An enum representing the different status of a process.
+ */
+export enum ProcessStatus {
+  /** The process is running. */
+  Running = "running",
+  /** The process has been stopped. */
+  Stopped = "stopped",
+  /** The process has encountered an error. */
+  Errored = "errored",
+  /** The process is restarting. */
+  Restarting = "restarting",
 }
