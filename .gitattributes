@@ -1,0 +1,63 @@
+# Line endings and normalization
+# Ensure consistent line endings across OSes
+* text=auto
+
+# Force LF for scripts and source code
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.tgz binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+*.mp3 binary
+*.mp4 binary
+
+# Language-specific diff
+# Use better diff for JSON
+*.json diff=json
+
+# Use better diff for TypeScript
+*.ts diff=typescript
+*.tsx diff=typescript
+
+# Export-ignore
+# Do not include development files when exporting archives
+*.log export-ignore
+node_modules/ export-ignore
+dist/ export-ignore
+coverage/ export-ignore
+.env export-ignore
+.DS_Store export-ignore
+.vscode/ export-ignore
+
+# Merge strategies
+# Keep binary files as-is during merges
+*.png merge=binary
+*.jpg merge=binary
+*.jpeg merge=binary
+*.gif merge=binary
+*.ico merge=binary
+*.woff merge=binary
+*.woff2 merge=binary
+*.eot merge=binary
+*.ttf merge=binary
