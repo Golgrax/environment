@@ -13,6 +13,8 @@ import type {
  *
  * @template S - The environment schema type.
  * @template K - The key within the environment schema.
+ *
+ * @internal This type is used internally and is not intended for external use.
  */
 type HookCallback<S extends IEnvironmentSchema, K extends keyof S = keyof S> = (
   key: K,
@@ -25,6 +27,8 @@ type HookCallback<S extends IEnvironmentSchema, K extends keyof S = keyof S> = (
  *
  * @template K - The key of the variable.
  * @template V - The type of the variable's value.
+ *
+ * @internal This type is used internally and is not intended for external use.
  */
 interface TemporaryValue<K extends PropertyKey, V> {
   key: K;
@@ -33,16 +37,11 @@ interface TemporaryValue<K extends PropertyKey, V> {
 }
 
 /**
- * A strongly typed and feature-rich environment variable manager.
+ * A class that provides methods to interact and manage with the environment variables.
  *
- * Provides advanced features such as:
- * - Hook registration and lifecycle events
- * - Snapshotting and restoring environment state
- * - Temporary and conditional variable management
- * - One-way hashing (and future encryption support)
- * - Computation helpers and auto-cleaning of expired values
- *
- * @template S - The environment schema interface.
+ * @template S - The environment schema type.
+ * @template K - The key within the environment schema.
+ * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-manager.md)
  */
 class ProcessManager<S extends IEnvironmentSchema>
   implements IProcessManager<S>
