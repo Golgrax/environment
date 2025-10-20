@@ -23,6 +23,7 @@ interface IProcessController<
     args: Array<string>,
     options?: O,
   ): ChildProcessWithoutNullStreams;
+
   stop(process: P, signal: NodeJS.Signals): boolean;
   restart(
     process: P,
@@ -30,6 +31,7 @@ interface IProcessController<
     args: Array<string>,
     options?: O,
   ): ChildProcessWithoutNullStreams;
+
   isRunning(process: P): boolean;
   //#endregion Process Management
 }
