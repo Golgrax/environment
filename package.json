@@ -1,6 +1,6 @@
 {
   "name": "@octovel/environment",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A lightweight and cross-platform Node.js library to safely interact with the system, user, and process environment through a unified, type-safe API.",
   "type": "module",
   "main": "./build/index.js",
