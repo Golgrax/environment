@@ -21,5 +21,11 @@
     }
   },
   "include": ["source/**/*.ts", "tsup.config.ts"],
-  "exclude": ["node_modules", "build", "**/__tests__/*", "mocks"]
+  "exclude": [
+    "node_modules",
+    "build",
+    "**/__tests__/*",
+    "mocks",
+    "examples/**/*.ts"
+  ]
 }
