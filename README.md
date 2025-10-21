@@ -6,13 +6,13 @@ A lightweight and cross-platform Node.js library to safely interact with the **s
 
 ## Classes
 
-* **[`ProcessRegistry`](guides/process-registry.md)** – Track and manage active child processes.  
-* **[`ProcessMonitor`](guides/process-monitor.md)** – Monitor process health and uptime.  
-* **[`ProcessManager`](guides/process-manager.md)** – Manage environment variables with hooks, temporary/conditional values, and hashing.  
-* **[`ProcessController`](guides/process-controller.md)** – Control and manage processes.  
+* **[`ProcessRegistry`](source/classes/process/ProcessRegistry.ts)** – Track and manage active child processes.  
+* **[`ProcessMonitor`](source/classes/process/ProcessMonitor.ts)** – Monitor process health and uptime.  
+* **[`ProcessManager`](source/classes/process/ProcessManager.ts)** – Manage environment variables with hooks, temporary/conditional values, and hashing.  
+* **[`ProcessController`](source/classes/process/ProcessController.ts)** – Control and manage processes.  
 
-* **[`UserEnvironment`](guides/user-environment.md)** – Manage user-specific environment variables.  
-* **[`SystemEnvironment`](guides/system-environment.md)** – Manage system-specific environment variables.  
+* **[`UserEnvironment`](source/classes/user/UserEnvironment.ts)** – Manage user-specific environment variables.  
+* **[`SystemEnvironment`](source/classes/system/SystemEnvironment.ts)** – Manage system-specific environment variables.  
 
 ---
 
@@ -43,12 +43,12 @@ console.log(env.get("NODE_ENV")); // "development"
 
 ## Documentation
 
-* [ProcessRegistry Guide](guides/process-registry.md)
-* [ProcessMonitor Guide](guides/process-monitor.md)
-* [ProcessManager Guide](guides/process-manager.md)
-* [ProcessController Guide](guides/process-controller.md)
-* [UserEnvironment Guide](guides/user-environment.md)
-* [SystemEnvironment Guide](guides/system-environment.md)
+* [ProcessRegistry Guide](docs/guides/process-registry.md)
+* [ProcessMonitor Guide](docs/guides/process-monitor.md)
+* [ProcessManager Guide](docs/guides/process-manager.md)
+* [ProcessController Guide](docs/guides/process-controller.md)
+* [UserEnvironment Guide](docs/guides/user-environment.md)
+* [SystemEnvironment Guide](docs/guides/system-environment.md)
 
 ---
 
