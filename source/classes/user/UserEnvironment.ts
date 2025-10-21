@@ -16,7 +16,7 @@ import type { IUserEnvironment } from "@/definitions/user/IUserEnvironment";
 
 /**
  * A class that provides methods for managing user environment variables.
- * Supports both Windows and Unix-based systems.
+ * Supports both Windows (HKCU) and Unix-based systems. (~/)
  *
  * @template S - The abstract environment schema.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/user-environment.md)
@@ -96,7 +96,6 @@ class UserEnvironment<S extends Record<string, string> = Record<string, string>>
    * @param name - The name of the environment variable to set.
    * @param value - The value to set for the environment variable.
    * @param options - Optional options for the operation.
-   * @returns void
    */
   public set<K extends keyof S>(
     name: K,
@@ -179,7 +178,6 @@ class UserEnvironment<S extends Record<string, string> = Record<string, string>>
    * Removes an environment variable from the user's environment.
    *
    * @param name The name of the environment variable to remove.
-   * @returns void
    */
   public remove<K extends keyof S>(name: K): void {
     switch (this.platform) {
