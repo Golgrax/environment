@@ -1,6 +1,6 @@
 ## Overview
 
-The `SystemEnvironment` class provides a consistent, platform-aware interface for **reading, modifying, and managing system-wide environment variables**.
+The `SystemEnvironment` class provides a consistent, platform-aware interface for reading, modifying, and managing system-wide environment variables.
 
 It allows administrative-level access to environment configurations, supporting:
 
@@ -10,7 +10,7 @@ It allows administrative-level access to environment configurations, supporting:
 
 This class is designed for **administrative scripts, setup tools, and system configuration utilities** that need to alter global environment settings accessible by all users.
 
-**Source:** [`source/classes/SystemEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/SystemEnvironment.ts)
+**Source:** [`source/classes/system/SystemEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/system/SystemEnvironment.ts)
 
 ---
 
