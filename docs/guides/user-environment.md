@@ -1,6 +1,6 @@
 ## Overview
 
-The `UserEnvironment` class provides a unified interface for **reading, writing, and managing user environment variables** across major desktop platforms.
+The `UserEnvironment` class provides a unified interface for reading, writing, and managing user environment variables across major desktop platforms.
 
 It supports:
 
@@ -10,7 +10,7 @@ It supports:
 
 This class can be used to manage custom runtime variables, modify system paths, or synchronize environment configurations across systems.
 
-**Source:** [`source/classes/UserEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/UserEnvironment.ts)
+**Source:** [`source/classes/user/UserEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/user/UserEnvironment.ts)
 
 ---
 
