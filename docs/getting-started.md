@@ -58,3 +58,32 @@ To learn more about specific features, see:
 * **Node.js:** v18 or later
 * **Platform:** Windows, Linux, or macOS
 * **Language:** TypeScript (fully supported)
+
+## Troubleshooting / FAQ
+
+---
+
+### My environment variables aren’t changing on Windows
+
+Changes made through the `UserEnvironment` or `SystemEnvironment` classes affect **future processes only** — not the currently running one.
+Restart your shell or application to apply updated values.
+
+---
+
+### “Access Denied” when editing system variables
+
+System-level edits require **administrator privileges**.
+Run your terminal as Administrator (Windows) or use `sudo` (Linux/macOS).
+
+---
+
+### The `ProcessRegistry` doesn’t show my process after exit
+
+Once a process terminates, its PID becomes invalid. The registry keeps only metadata, not active tracking, use `ProcessMonitor` for real-time checks.
+
+---
+
+### Where can I report issues or request features?
+
+You can report issues or request new features directly on GitHub:
+[octovel/environment-node Issues](https://github.com/octovel/environment-node/issues)
