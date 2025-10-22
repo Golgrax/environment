@@ -11,7 +11,7 @@ The `ProcessManager` class provides a **comprehensive API for managing environme
 
 It is designed to **abstract environment manipulation**, providing safe, extensible, and observable operations, especially useful in CLI tools, build orchestrators, and process management frameworks.
 
-**Source:** [`source/classes/ProcessManager.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/ProcessManager.ts)
+**Source:** [`source/classes/process/ProcessManager.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessManager.ts)
 
 ---
 
@@ -115,7 +115,7 @@ const manager = new ProcessManager<EnvSchema>();
 
 // Set variables
 manager.set("NODE_ENV", "development");
-manager.setTemporary("API_KEY", "secret", { ttl: 5000 });
+manager.setTemporary("API_KEY", "secret", { ttl: 5000 }); // 5 seconds
 
 // Get variables
 console.log(manager.get("NODE_ENV")); // "development"
