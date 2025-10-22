@@ -1,11 +1,11 @@
 ## Overview
 
-The `ProcessController` class provides a robust, type-safe abstraction for **managing child processes** in Node.js.
-It supports **starting**, **stopping**, **restarting**, and **inspecting** system processes — allowing you to integrate background tasks, automation scripts, or subprocess orchestration into your applications.
+The `ProcessController` class provides robust, type-safe methods for managing child processes in Node.js.
+It supports starting, stopping, restarting, and inspecting system processes. Allowing you to integrate background tasks, automation scripts, or subprocess orchestration into your applications.
 
 Unlike lower-level wrappers around `spawn()`, this class enforces clean error handling, strong typing, and consistent process management patterns across different environments.
 
-**Source:** [`source/classes/ProcessController.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/ProcessController.ts)
+**Source:** [`source/classes/ProcessController.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessController.ts)
 
 ---
 
@@ -46,7 +46,7 @@ Starts a new child process with the specified command and arguments.
 | Name      | Type                        | Description                                                      |
 | --------- | --------------------------- | ---------------------------------------------------------------- |
 | `command` | `string`                    | The executable command to run.                                   |
-| `args`    | `Readonly<string[]>`        | Arguments to pass to the executable.                             |
+| `args`    | `Readonly<Array<string>>`   | Arguments to pass to the executable.                             |
 | `options` | `IProcessControllerOptions` | Optional configuration for `cwd`, `env`, or `detached` behavior. |
 
 #### Returns
@@ -71,7 +71,7 @@ proc.stdout.on("data", (chunk) => console.log(chunk.toString()));
 #### Best Practices
 
 * Always attach event listeners (`stdout`, `stderr`, `exit`) to handle output and lifecycle.
-* Avoid using `spawn()` for commands that require shell parsing — use `child_process.exec()` in those cases.
+* Avoid using `spawn()` for commands that require shell parsing, use `child_process.exec()` in those cases.
 
 ---
 
@@ -137,7 +137,7 @@ Stops a currently running process and starts a new one immediately.
 | --------- | --------------------------- | ------------------------------------------- |
 | `process` | `ChildProcess`              | The existing process to stop.               |
 | `command` | `string`                    | The command to run after restart.           |
-| `args`    | `Readonly<string[]>`        | Arguments to pass to the new process.       |
+| `args`    | `Readonly<Array<string>>`        | Arguments to pass to the new process.       |
 | `options` | `IProcessControllerOptions` | Optional configuration for the new process. |
 
 #### Returns
@@ -201,13 +201,13 @@ setInterval(() => {
 
 #### Behavior
 
-* Internally uses `process.kill(pid, 0)` — a harmless signal used only to test existence.
+* Internally uses `process.kill(pid, 0)`, a harmless signal used only to test existence.
 * Handles `ESRCH` (no process found) and `EPERM` (permission denied, but alive) cases.
 
 #### Best Practices
 
 * Works reliably on all major platforms (Windows, Linux, macOS).
-* Do not call this too frequently on short-lived processes — polling too fast may waste resources.
+* Do not call this too frequently on short-lived processes,  polling too fast may waste resources.
 
 ---
 
@@ -274,7 +274,7 @@ setTimeout(() => {
 
 ## Best Practices
 
-* Always handle process I/O streams — unhandled streams can cause memory leaks.
+* Always handle process I/O streams, unhandled streams can cause memory leaks.
 * Use this class in CLI tools, environment managers, or background task schedulers.
 * Prefer spawning **detached** processes only when your parent script should exit while leaving the child alive.
 * For long-running daemons or services, integrate with your system’s supervisor (e.g., systemd, PM2) instead.
