@@ -1,11 +1,11 @@
 ## Overview
 
-The `ProcessRegistry` class provides an in-memory registry for tracking and managing **active process metadata**.
+The `ProcessRegistry` class provides an in-memory registry for tracking and managing active process metadata.
 It allows you to store, retrieve, and manipulate records of running `ChildProcess` instances with associated metadata, such as process name, command, arguments, and timestamps.
 
 This class is particularly useful when managing multiple background processes, enabling consistent bookkeeping for monitoring, cleanup, or orchestration logic.
 
-**Source:** [`source/classes/ProcessRegistry.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/ProcessRegistry.ts)
+**Source:** [`source/classes/process/ProcessRegistry.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessRegistry.ts)
 
 ---
 
