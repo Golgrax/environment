@@ -10,7 +10,7 @@ const manager = new ProcessManager<EnvSchema>();
 
 // Set variables
 manager.set("NODE_ENV", "development");
-manager.setTemporary("API_KEY", "secret", { ttl: 5000 });
+manager.setTemporary("API_KEY", "secret", { ttl: 5000 }); // 5 seconds
 
 // Get variables
 console.log(manager.get("NODE_ENV")); // "development"
