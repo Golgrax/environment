@@ -1,73 +1,113 @@
 # Contributing to Octovel
 
-Thank you for your interest in contributing to Octovel! We appreciate your time and effort. Please take a moment to review this document to make the contribution process smooth and effective for everyone involved.
+Thank you for your interest in contributing to Octovel.  
+This document explains how to report issues, suggest enhancements, and contribute code across Octovel’s open-source projects.
+
+Every contribution, whether code, documentation, or discussion, helps strengthen the Octovel ecosystem.
+
+---
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+Participation in this project is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).  
+By contributing, you agree to uphold these principles and help foster a respectful, inclusive, and professional environment.
 
-## How Can I Contribute?
+---
 
-First of all, make sure you have [Node.js](https://nodejs.org/) installed on your system.
-We use `pnpm` as our package manager.
+## Getting Started
 
-### Reporting Bugs
+Before contributing, ensure that your development environment matches the requirements of the specific project.  
+Each repository defines its own technology stack, tooling, and setup process — please refer to the project’s **[STACK.md](STACK.md)** (or equivalent setup file) for details.
 
-Before creating bug reports, please check [existing issues](https://github.com/octovel/.github/issues) to see if the problem has already been reported.
+If you are new to Octovel’s projects, start by reviewing the repository’s documentation and build instructions before submitting changes.
 
-When creating a bug report, please include:
+---
 
-- A clear, descriptive title
-- Steps to reproduce the issue
-- Expected vs. actual behavior
-- Your environment (OS, browser, version, etc.)
-- Any relevant screenshots or logs
+## Reporting Bugs
 
-### Suggesting Enhancements
+When encountering a bug or unexpected behavior, check the [existing issues](https://github.com/octovel/.github/issues) to see if it has already been reported.  
+Avoid creating duplicate reports, as this helps maintain a clear and efficient issue tracker.
 
-We welcome enhancement suggestions. When suggesting an enhancement:
+When creating a new issue, include:
 
-- Use a clear, descriptive title
-- Describe the current behavior and explain the suggested behavior
-- Explain why this enhancement would be useful
-- Include any relevant screenshots or mockups
+- A clear and descriptive title  
+- Steps to reproduce the problem  
+- Expected versus actual results  
+- Environment details (OS, framework version, etc.)  
+- Logs, stack traces, or screenshots if relevant  
 
-### Your First Code Contribution
+Complete and reproducible reports significantly speed up investigation and resolution.
 
-1. **Fork** the repository
-2. **Clone** your fork locally
-3. **Create a new branch** for your feature/fix: `git checkout -b feature/amazing-feature`
-4. **Make your changes**
-5. **Test your changes**
-6. **Commit your changes** with a clear message
-7. **Push** to your fork
-8. **Open a Pull Request**
+---
 
-### Pull Request Process
+## Suggesting Enhancements
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-2. Update the README.md with details of changes if needed.
-3. The PR must pass all CI/CD checks before it can be merged.
-4. You may merge the PR once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the reviewer to merge it for you.
+Enhancement requests are welcome and encouraged.  
+Clearly describe the motivation behind your proposal and how it benefits users or developers.
 
-### Code Style
+When suggesting an improvement:
 
-- Follow the existing code style
-- Use meaningful variable and function names
-- Add comments where necessary
-- Keep functions small and focused
+- Use a descriptive title and explain the current limitation  
+- Propose your solution and describe its advantages  
+- Provide any examples, mockups, or references that clarify the idea  
 
-### Git Commit Messages
+---
 
-- Use the present tense ("Add feature" not "Added feature")
-- Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-- Limit the first line to 72 characters or less
-- Reference issues and pull requests liberally
+## Submitting Code Contributions
 
-## License
+The contribution workflow is designed to ensure quality, consistency, and easy collaboration across Octovel projects.
 
-By contributing, you agree that your contributions will be licensed under its [LICENSE](LICENSE).
+1. **Fork** the repository to your GitHub account.  
+2. **Clone** your fork locally.  
+3. **Create a new branch** for your change:  
+   `git checkout -b feature/my-feature`  
+4. **Implement and test** your modifications according to the project’s stack and coding conventions.  
+5. **Commit** changes with clear and descriptive messages.  
+6. **Push** your branch to your fork.  
+7. **Open a Pull Request** to the main branch.
 
-## Questions?
+---
 
-If you have any questions, feel free to [open an issue](https://github.com/octovel/.github/issues/new) or contact the maintainers.
+## Pull Request Guidelines
+
+To maintain a consistent and reliable codebase:
+
+- Remove unnecessary build or dependency files before submitting.  
+- Update documentation (e.g., `README.md`) if your change affects usage or configuration.  
+- Ensure your PR passes all tests and automated checks.  
+- PRs require review and approval by at least two maintainers. If you cannot merge directly, request a maintainer to do so.
+
+---
+
+## Code Style and Commit Standards
+
+Consistency and clarity are key to Octovel’s development philosophy.
+
+**Code Style**
+
+- Follow the existing conventions defined by the project stack  
+- Use meaningful names and write concise, maintainable code  
+- Add comments for complex logic when appropriate  
+- Keep functions focused and modular  
+
+**Commit Messages**
+
+- Use the **present tense** (“Fix issue”, not “Fixed issue”)  
+- Use the **imperative mood** (“Add feature”, not “Adds feature”)  
+- Keep the first line under **72 characters**  
+- Reference issues and pull requests when relevant  
+
+---
+
+## Licensing
+
+By contributing to an Octovel project, you agree that your contributions are licensed under the project’s existing [LICENSE](LICENSE).  
+This ensures consistency and compliance across the Octovel ecosystem.
+
+---
+
+## Questions and Contact
+
+If you have questions or need clarification about the contribution process,  
+please open a discussion or issue at:  
+[https://github.com/octovel/.github/issues/new](https://github.com/octovel/.github/issues/new)
