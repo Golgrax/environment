@@ -32,3 +32,14 @@ trim_trailing_whitespace = false
 # windows shell scripts
 [*.{cmd,bat,ps1}]
 end_of_line = crlf
+
+[.github/CODEOWNERS]
+indent_size = 2
+indent_style = tab
+
+[Makefile]
+indent_size = 4
+indent_style = tab
+
+[VERSION]
+insert_final_newline = false
