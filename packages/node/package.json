@@ -1,0 +1,71 @@
+{
+  "name": "@octovel/environment",
+  "version": "0.0.22",
+  "description": "A lightweight and cross-platform Node.js library to safely interact with the system, user, and process environment through a unified, type-safe API.",
+  "type": "module",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "scripts": {
+    "build": "node ./scripts/building/build.js",
+    "build:bash": "bash ./scripts/building/shell/build.bash",
+    "build:powershell": "pwsh ./scripts/building/shell/build.ps1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/octovel/environment-node.git",
+    "directory": "."
+  },
+  "keywords": [
+    "package",
+    "node",
+    "typescript",
+    "environment"
+  ],
+  "author": "Sébastien GARCIA <sebastien.garcia@mail.com> (https://github.com/Striatp)",
+  "contributors": [
+    {
+      "name": "Sébastien GARCIA",
+      "email": "sebastien.garcia@mail.com",
+      "url": "https://github.com/Striatp"
+    }
+  ],
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "engine-strict": true,
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/octovel/environment-node/issues"
+  },
+  "homepage": "https://github.com/octovel/environment-node#readme",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/Striatp"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.cjs"
+    }
+  },
+  "files": [
+    "build",
+    "LICENSE",
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "packageManager": "pnpm@10.19.0",
+  "devDependencies": {
+    "@types/node": "^24.7.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
+}
