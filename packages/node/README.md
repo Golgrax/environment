@@ -1,6 +1,6 @@
 # @octovel/environment
 
-A lightweight and cross-platform Node.js library to safely interact with the **system**, **user**, and **process** environment through a unified, **type-safe API**.
+A lightweight and cross-platform Node.js library to safely interact with the system, **user**, and **process** environment through a unified, **type-safe API**.
 
 ---
 
