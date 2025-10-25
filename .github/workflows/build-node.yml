@@ -26,9 +26,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install PNPM
+        working-directory: packages/node
         run: npm install -g pnpm
 
       - name: Install dependencies
+        working-directory: packages/node
         run: pnpm install --no-frozen-lockfile
 
       - name: Build
