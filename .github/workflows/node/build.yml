@@ -5,7 +5,7 @@ on:
     branches: [canary, stable]
     paths:
       - "packages/node/**"
-      - ".github/workflows/build-node.yml"
+      - ".github/workflows/node/build.yml"
 
 jobs:
   build-node:
