@@ -3,20 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright © 2025 Octovel
 
-# Get the absolute path of the directory this script lives in
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-
-# Reference paths RELATIVE TO THE SCRIPT, not the current working directory
-SCRIPT_PATH="${SCRIPT_DIR}/../../source/index.ts"
-OUTPUT_DIR="${SCRIPT_DIR}/../../build"
-OUTPUT_PATHS=(
-  "${OUTPUT_DIR}/index.js"
-  "${OUTPUT_DIR}/index.js.map"
-  "${OUTPUT_DIR}/index.cjs"
-  "${OUTPUT_DIR}/index.cjs.map"
-  "${OUTPUT_DIR}/index.d.ts"
-  "${OUTPUT_DIR}/index.d.cts"
-)
+SCRIPT_PATH="${PWD}/source/index.ts"
+OUTPUT_PATHS=("${PWD}/build/index.js" "${PWD}/build/index.js.map" "${PWD}/build/index.cjs" "${PWD}/build/index.cjs.map" "${PWD}/build/index.d.ts" "${PWD}/build/index.d.cts")
 
 YELLOW="\033[1;33m"
 GREEN="\033[1;32m"
@@ -52,11 +40,11 @@ build_script() {
   fi
 
   if [ "$clean" = true ]; then
-    write_info "Cleaning previous build files..."
+    write_info "${YELLOW}Cleaning previous build files...${RESET}"
     for file in "${OUTPUT_PATHS[@]}"; do
       if [ -f "$file" ]; then
         rm -f "$file"
-        echo -e " ${YELLOW}- ${RESET}${file} ${RED}(deleted)${RESET}"
+        echo -e " ${YELLOW}- ${RESET}${YELLOW}${file}${RESET} ${RED}(deleted)${RESET}"
       fi
     done
     echo ""
@@ -73,12 +61,12 @@ build_script() {
   if [ $? -eq 0 ]; then
     write_success "Build completed successfully!"
     echo ""
-    write_info "Generated files:"
+    write_info "${YELLOW}Generated files:${RESET}"
     for file in "${OUTPUT_PATHS[@]}"; do
       if [ -f "$file" ]; then
-        echo -e " ${GREEN}+ ${RESET}${file} ${GREEN}(generated)${RESET}"
+        echo -e " ${GREEN}+ ${RESET}${YELLOW}${file}${RESET} ${GREEN}(generated)${RESET}"
       else
-        echo -e " ${RED}- ${RESET}${file} ${RED}(missing)${RESET}"
+        echo -e " ${RED}- ${RESET}${YELLOW}${file}${RESET} ${RED}(missing)${RESET}"
       fi
     done
   else
