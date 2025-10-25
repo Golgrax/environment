@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Node implementation monitoring
+  # Runs on the canary branch to avoid merge conflicts
+  - package-ecosystem: "npm"
+    directory: "/packages/node"
+    target-branch: "canary"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "chore(deps)"
+
+  # GitHub Actions monitoring
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
