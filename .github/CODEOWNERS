@@ -1,5 +1,6 @@
 # All files owned by Core Developers team
-*       @octovel/cto-leadership
+# SPDX-License-Identifier: Apache-2.0
+# Copyright © 2025 Octovel
 
-# CI/CD workflows owned by CI/CD & DevOps team
-.github/workflows/*   @octovel/chief    @octovel/cto-leadership
+*					@octovel/chief
+*					@octovel/cto-leadership
