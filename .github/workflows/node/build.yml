@@ -3,8 +3,7 @@ name: Build Node Implementation
 on:
   push:
     branches:
-      - origin/canary
-      - origin/stable
+      - "**"
     paths:
       - "packages/node/**"
       - ".github/workflows/node/build.yml"
