@@ -1,0 +1,42 @@
+name: Build Node Implementation
+
+on:
+  push:
+    branches:
+      - origin/canary
+      - origin/stable
+    paths:
+      - "packages/node/**"
+      - ".github/workflows/build-node.yml"
+
+jobs:
+  build-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Node implementation
+        working-directory: packages/node
+        run: pnpm run build
