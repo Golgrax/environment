@@ -1,4 +1,4 @@
-### VERSION 0.0.0
+### VERSION 0.0.22
 
 We have decided to transition from a standard Node.JS repository library into a full polyglot mono-repository, which will allow us to publish this library to different language ecosystems, such as; Rust (crates.io), Python (PyPI), Go (Go Modules), TypeScript (npm), PowerShell (PSGallery), and C# (NuGet).
 
