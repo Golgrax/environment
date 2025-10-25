@@ -3,7 +3,11 @@ name: Build Node Implementation
 on:
   push:
     branches:
-      - "*"
+      - canary
+      - stable
+    paths:
+      - "packages/node/**"
+      - ".github/workflows/build-node.yml"
 
 jobs:
   build-node:
@@ -13,26 +17,20 @@ jobs:
         node-version: [18.x, 20.x]
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
+      - name: Install PNPM
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
-      - name: Build Node implementation
+      - name: Build
         working-directory: packages/node
         run: pnpm run build
