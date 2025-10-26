@@ -4,7 +4,6 @@ import { constants } from "node:fs/promises";
 
 import { Platform } from "@/types/global";
 import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
-import type { IUserEnvironment } from "@/definitions/user/IUserEnvironment";
 
 /**
  * A class that provides methods for managing **system-level environment variables**.
@@ -17,8 +16,7 @@ import type { IUserEnvironment } from "@/definitions/user/IUserEnvironment";
  */
 class SystemEnvironment<
   S extends Record<string, string> = Record<string, string>,
-> implements IUserEnvironment<S>
-{
+> {
   /** The platform to base operations on. */
   public platform: Platform;
 
