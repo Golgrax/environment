@@ -4,101 +4,146 @@ import {
   type ChildProcessWithoutNullStreams,
 } from "node:child_process";
 
+import { platform } from "node:os";
+
 import type { IProcessControllerOptions } from "@/types/process";
 import type { IProcessController } from "@/definitions/process/IProcessController";
 
 /**
- * A class that provides methods for managing active processes.
+ * This class provides a set of methods for managing and controlling child processes in Node.js.
+ * It allows for the creation, monitoring, and termination of child processes.
  *
- * @template P - Type of the process instance.
- * @template O - Type of the options object.
- * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-controller.md)
+ * @template P - Generic type representing the child process.
+ * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/packages/node/docs/guides/process-controller.md)
  */
 class ProcessController<P extends ChildProcess>
   implements IProcessController<P>
 {
+  private static readonly IS_WINDOWS = platform() === "win32";
+
   //#region Process Management
   /**
-   * Starts a new child process with the given command and arguments.
+   * Starts a new child process.
    *
    * @param command - The executable command to run.
-   * @param args - A readonly array of string arguments to pass to the command.
-   * @param options - Optional options controlling spawn behavior.
-   * @returns The newly created `ChildProcessWithoutNullStreams` instance.
+   * @param args - An array of string arguments to pass to the command.
+   * @param options - Optional spawn configuration, including working directory,
+   *                  environment variables, and detached mode.
+   * @returns A `ChildProcessWithoutNullStreams` instance representing the spawned process.
    */
   public start(
     command: string,
     args: Readonly<Array<string>>,
     options?: IProcessControllerOptions,
   ): ChildProcessWithoutNullStreams {
-    try {
-      return spawn(command, args, {
-        cwd: options?.cwd,
-        env: options?.env,
-        detached: options?.detached,
-        stdio: "pipe",
-      });
-    } catch (error) {
-      console.error(`Failed to start process: ${error}`);
-      throw error;
+    if (!command?.trim() || !Array.isArray(args)) {
+      throw new Error("Invalid command or arguments");
     }
+
+    return spawn(command, args, {
+      cwd: options?.cwd ?? process.cwd(),
+      env: options?.env ? { ...process.env, ...options.env } : process.env,
+      detached: options?.detached ?? false,
+      stdio: "pipe",
+    });
   }
 
   /**
-   * Attempts to stop a running process gracefully by sending it a termination signal.
+   * Stops a running child process gracefully using the specified signal,
+   * with optional timeout and fallback to force kill.
    *
-   * @param process - The `ChildProcess` instance to terminate.
-   * @param signal - The termination signal to send (default: `"SIGTERM"`).
-   * @returns Whether the termination signal was successfully delivered.
+   * @param process - The process to terminate.
+   * @param signal - Signal to send for graceful termination (default: `"SIGTERM"`).
+   * @param timeout - Maximum time to wait for graceful exit before sending `SIGKILL` (default: 5000ms).
+   * @returns A Promise resolving to `true` if the process was terminated successfully, `false` otherwise.
    */
-  public stop(process: P, signal: NodeJS.Signals = "SIGTERM"): boolean {
+  public async stop(
+    process: P,
+    signal: NodeJS.Signals = "SIGTERM",
+    timeout = 5000,
+  ): Promise<boolean> {
+    if (!this.isRunning(process)) return false;
+
     try {
+      if (ProcessController.IS_WINDOWS) {
+        const killer: ChildProcessWithoutNullStreams = spawn("taskkill", [
+          "/PID",
+          String(process.pid),
+          "/T",
+          "/F",
+        ]);
+        await new Promise<void>((r) => {
+          killer.once("exit", r);
+          killer.once("close", r);
+        });
+        await new Promise((r) => setTimeout(r, 300));
+        return !this.isRunning(process);
+      }
+
       process.kill(signal);
+
+      const exited: boolean = await new Promise<boolean>((r) => {
+        const t: NodeJS.Timeout = setTimeout(() => r(false), timeout);
+        const done: () => void = (): void => {
+          clearTimeout(t);
+          r(true);
+        };
+        process.once("exit", done);
+        process.once("close", done);
+      });
+
+      if (!exited && this.isRunning(process)) {
+        process.kill("SIGKILL");
+      }
+
       return true;
-    } catch (error) {
-      console.error(error);
+    } catch {
       return false;
     }
   }
 
   /**
-   * Restarts an existing process by first stopping it and then creating a new one.
-   *
-   * This is a **synchronous** implementation. If your restart logic involves cleanup
-   * or asynchronous operations, consider overriding this method or extending
-   * {@link ProcessController} to return a `Promise<boolean>` instead.
+   * Restarts a running process by first stopping it and then starting a new one
+   * with the provided command and arguments.
    *
    * @param process - The currently running process to restart.
    * @param command - The executable command for the new process.
-   * @param args - Command-line arguments for the new process.
-   * @param options - Optional spawn configuration.
-   * @returns `true` if the process was restarted successfully.
+   * @param args - Array of command-line arguments for the new process.
+   * @param options - Optional spawn configuration for the new process.
+   * @returns A Promise resolving to the new `ChildProcessWithoutNullStreams` instance.
+   * @throws Will throw if stopping the existing process fails.
    */
-  public restart(
+  public async restart(
     process: P,
     command: string,
     args: Readonly<Array<string>>,
     options?: IProcessControllerOptions,
-  ): ChildProcessWithoutNullStreams {
-    this.stop(process, "SIGTERM");
+  ): Promise<ChildProcessWithoutNullStreams> {
+    if (!(await this.stop(process))) {
+      throw new Error("Failed to stop process");
+    }
+    await new Promise((r) => setTimeout(r, 1000)); // gives the OS time to release resources
     return this.start(command, args, options);
   }
 
   /**
-   * Checks whether a given process is currently alive.
+   * Checks if a process is currently alive.
    *
-   * @param process - The {@link ChildProcess} instance to inspect.
+   * A process is considered running if it has a valid PID, is not killed,
+   * and has no exit code.
+   *
+   * @param process - The process to check.
    * @returns `true` if the process is alive, `false` otherwise.
    */
   public isRunning(process: P): boolean {
-    if (!process || typeof process.pid !== "number") return false;
+    if (!process?.pid || process.exitCode !== null || process.killed) {
+      return false;
+    }
+
     try {
-      // Sending signal 0 doesn’t kill the process but checks if it exists.
       process.kill(0);
       return true;
     } catch (error: any) {
-      // ESRCH: process does not exist
-      // EPERM: no permission (but process exists)
       return error.code === "EPERM";
     }
   }
