@@ -55,6 +55,7 @@ class ProcessController<P extends ChildProcess>
    * @param process - The process to terminate.
    * @param signal - Signal to send for graceful termination (default: `"SIGTERM"`).
    * @param timeout - Maximum time to wait for graceful exit before sending `SIGKILL` (default: 5000ms).
+   *
    * @returns A Promise resolving to `true` if the process was terminated successfully, `false` otherwise.
    */
   public async stop(
@@ -110,8 +111,8 @@ class ProcessController<P extends ChildProcess>
    * @param command - The executable command for the new process.
    * @param args - Array of command-line arguments for the new process.
    * @param options - Optional spawn configuration for the new process.
+   *
    * @returns A Promise resolving to the new `ChildProcessWithoutNullStreams` instance.
-   * @throws Will throw if stopping the existing process fails.
    */
   public async restart(
     process: P,
@@ -133,6 +134,7 @@ class ProcessController<P extends ChildProcess>
    * and has no exit code.
    *
    * @param process - The process to check.
+   *
    * @returns `true` if the process is alive, `false` otherwise.
    */
   public isRunning(process: P): boolean {
