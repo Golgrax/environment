@@ -24,13 +24,13 @@ interface IProcessController<
     options?: O,
   ): ChildProcessWithoutNullStreams;
 
-  stop(process: P, signal: NodeJS.Signals): boolean;
+  stop(process: P, signal: NodeJS.Signals, timeout: number): Promise<boolean>;
   restart(
     process: P,
     command: Readonly<string>,
     args: Array<string>,
     options?: O,
-  ): ChildProcessWithoutNullStreams;
+  ): Promise<ChildProcessWithoutNullStreams>;
 
   isRunning(process: P): boolean;
   //#endregion Process Management
