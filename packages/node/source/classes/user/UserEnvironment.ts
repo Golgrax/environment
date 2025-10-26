@@ -12,7 +12,6 @@ import { basename, join } from "node:path";
 
 import { Platform } from "@/types/global";
 import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
-import type { IUserEnvironment } from "@/definitions/user/IUserEnvironment";
 
 /**
  * A class that provides methods for managing user environment variables.
@@ -21,9 +20,9 @@ import type { IUserEnvironment } from "@/definitions/user/IUserEnvironment";
  * @template S - The abstract environment schema.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/user-environment.md)
  */
-class UserEnvironment<S extends Record<string, string> = Record<string, string>>
-  implements IUserEnvironment<S>
-{
+class UserEnvironment<
+  S extends Record<string, string> = Record<string, string>,
+> {
   /** The platform to base operations on. */
   public platform: Platform;
 
