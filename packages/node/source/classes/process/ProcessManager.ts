@@ -2,10 +2,11 @@ import crypto from "node:crypto";
 
 import { EncryptionAlgorithm } from "@/types/encryption";
 import type { IEnvironmentSchema } from "@/types/process";
-import type {
-  HookType,
-  IProcessManager,
-} from "@/definitions/process/IProcessManager";
+
+/**
+ * A type representing the different types of hooks that can be triggered by the `ProcessManager` class.
+ */
+export type HookType = "add" | "delete" | "update" | "clear" | "change";
 
 /**
  * Represents a callback function for environment lifecycle hooks
@@ -43,9 +44,7 @@ interface TemporaryValue<K extends PropertyKey, V> {
  * @template K - The key within the environment schema.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-manager.md)
  */
-class ProcessManager<S extends IEnvironmentSchema>
-  implements IProcessManager<S>
-{
+class ProcessManager<S extends IEnvironmentSchema> {
   /** Stores hook callbacks registered for various environment lifecycle events. */
   private _hooks: Record<HookType, Array<HookCallback<S>>> = {
     add: [],

@@ -7,7 +7,6 @@ import {
 import { platform } from "node:os";
 
 import type { IProcessControllerOptions } from "@/types/process";
-import type { IProcessController } from "@/definitions/process/IProcessController";
 
 /**
  * This class provides a set of methods for managing and controlling child processes in Node.js.
@@ -16,9 +15,7 @@ import type { IProcessController } from "@/definitions/process/IProcessControlle
  * @template P - Generic type representing the child process.
  * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/packages/node/docs/guides/process-controller.md)
  */
-class ProcessController<P extends ChildProcess>
-  implements IProcessController<P>
-{
+class ProcessController<P extends ChildProcess> {
   private static readonly IS_WINDOWS = platform() === "win32";
 
   //#region Process Management

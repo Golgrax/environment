@@ -1,7 +1,6 @@
 import type { ChildProcess } from "node:child_process";
 
 import type { IProcessInfo } from "@/types/process";
-import type { IProcessRegistry } from "@/definitions/process/IProcessRegistry";
 
 /**
  * A class that provides methods for managing records of active processes.
@@ -9,9 +8,7 @@ import type { IProcessRegistry } from "@/definitions/process/IProcessRegistry";
  * @template P - The specific type of child process being managed.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-registry.md)
  */
-export class ProcessRegistry<P extends ChildProcess = ChildProcess>
-  implements IProcessRegistry
-{
+export class ProcessRegistry<P extends ChildProcess = ChildProcess> {
   /**
    * Maps process IDs (`pid`) to their corresponding metadata and instance.
    *
