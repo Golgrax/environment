@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright © 2025 Octovel
 
-.PHONY: build-node
-.SILENT: build-node
+.PHONY: build/node
+.SILENT: build/node
 
 CLEAN ?= false
 SILENT ?= false
@@ -14,5 +14,5 @@ FLAGS := $(if $(filter true,$(CLEAN)),--clean) $(if $(filter true,$(SILENT)),--s
 BUILD_NODE_CMD := bash ./scripts/building/build.bash $(FLAGS)
 
 # Build the node implementation
-build-node:
+build/node:
 	@cd ./packages/node && $(BUILD_NODE_CMD)
