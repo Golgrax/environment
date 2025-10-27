@@ -7,8 +7,8 @@
   "types": "./build/index.d.ts",
   "scripts": {
     "build": "node ./scripts/building/build.js",
-    "build:bash": "bash ./scripts/building/shell/build.bash",
-    "build:powershell": "pwsh ./scripts/building/shell/build.ps1"
+    "build:bash": "bash ./scripts/building/build.bash",
+    "build:powershell": "pwsh ./scripts/building/build.ps1"
   },
   "repository": {
     "type": "git",
