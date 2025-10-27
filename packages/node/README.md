@@ -9,8 +9,7 @@ A lightweight and cross-platform Node.js library to safely interact with the sys
 
 * **[`UserEnvironment`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/user/UserEnvironment.ts)** – Manage user-specific environment variables.  
 * **[`SystemEnvironment`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/system/SystemEnvironment.ts)** – Manage system-specific environment variables.
-* **[`ProcessRegistry`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/process/ProcessRegistry.ts)** – Track and manage active child processes.  
-* **[`ProcessMonitor`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/process/ProcessMonitor.ts)** – Monitor process health and uptime.  
+* **[`ProcessRegistry`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/process/ProcessRegistry.ts)** – Track and manage active child processes.
 * **[`ProcessManager`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/process/ProcessManager.ts)** – Manage environment variables with hooks, temporary/conditional values, and hashing.  
 * **[`ProcessController`](https://github.com/octovel/environment/blob/main/packages/node/source/classes/process/ProcessController.ts)** – Control and manage processes.  
 
@@ -23,7 +22,6 @@ This library also provides some types to work with environment variables, and pr
 * [UserEnvironment Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/user-environment.md)
 * [SystemEnvironment Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/system-environment.md)
 * [ProcessRegistry Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/process-registry.md)
-* [ProcessMonitor Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/process-monitor.md)
 * [ProcessManager Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/process-manager.md)
 * [ProcessController Guide](https://github.com/octovel/environment/blob/main/packages/node/docs/guides/process-controller.md)
 
