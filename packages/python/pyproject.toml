@@ -1,5 +1,5 @@
 [project]
-name = "environment-py"
+name = "environment-pyython"
 version = "0.1.0"
 description = "Python abstraction for environment management and metrics"
 authors = [{ name = "Bekian" }]
