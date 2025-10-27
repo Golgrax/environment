@@ -1,4 +1,4 @@
-### Version 0.0.23
+# Version 0.0.23
 
 ## Additions
 
@@ -14,7 +14,9 @@
 - Deprecated and archived classes implementations.
 - Deprecated the `ProcessMonitor` class as it is no longer needed.
 
-### Version 0.0.22
+---
+
+# Version 0.0.22
 
 This is a major release, but not interacting with the API. We are transitioning to a new architecture that will allow for more flexibility and scalability.
 
