@@ -26,7 +26,7 @@ impl ProcessController {
     /// `Result<(), String>`
     /// # Errors
     /// `Err(String)` - The given command is empty
-    #[must_use = "`Result` is unused. Please use it to see if the process has succesfully started, else the other functions will panic."]
+    #[must_use = "`Result` is unused. Please use it to see if the process has succesfully started, else the other functions will not work as expected."]
     pub fn start(&mut self, command: &str, args: Option<Vec<&str>>) -> Result<(), String> {
         if self.process_child.is_some() {
             Err("There's already a running process. If you want to run more processes, construct a new struct.".to_string())
@@ -131,6 +131,7 @@ impl ProcessController {
     /// `Result<(), String>`
     /// # Errors
     /// `Err(String)` - The process could not be stopped.
+    #[must_use = "`Result` is unused. Please use it to see if the process has succesfully restarted, else the other functions will not work as expected."]
     pub fn restart(&mut self, command: &str, args: Option<Vec<&str>>, signal: i32) -> Result<(), String> {
         if self.stop(signal) {
             self.start(command, args)
