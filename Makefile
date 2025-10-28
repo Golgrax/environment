@@ -7,6 +7,7 @@
 CLEAN ?= false
 SILENT ?= false
 
+#region Node Implementation
 # Parse flags into an appendable string
 FLAGS := $(if $(filter true,$(CLEAN)),--clean) $(if $(filter true,$(SILENT)),--silent)
 
@@ -14,7 +15,6 @@ FLAGS := $(if $(filter true,$(CLEAN)),--clean) $(if $(filter true,$(SILENT)),--s
 BUILD_NODE_CMD := bash ./scripts/building/build.bash $(FLAGS)
 CLEAN_NODE_CMD := bash ./scripts/cleaning/clean.bash $(FLAGS)
 
-#region Node Implementation
 # Build the node implementation
 build/node:
 	@cd ./packages/node && $(BUILD_NODE_CMD)
