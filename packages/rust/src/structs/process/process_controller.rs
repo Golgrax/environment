@@ -30,7 +30,6 @@ impl ProcessController {
             fn fork() -> i32;
             fn execvp(path: *const i8, arg: *const *const i8) -> i32;
             fn pipe(fildes: *mut i32) -> i32;
-            fn close(fildes: i32) -> i32;
             fn dup2(oldfd: i32, newfd: i32) -> i32;
         }
         
@@ -65,14 +64,28 @@ impl ProcessController {
                 };
                 
 
-                close(pipe_stdout[0]);
-                close(pipe_stderr[0]);
+                match self.close(pipe_stdout[0]) {
+                    Ok(()) => {},
+                    Err(err) => return Err(err)
+                }
+
+                match self.close(pipe_stderr[0]) {
+                    Ok(()) => {},
+                    Err(err) => return Err(err)
+                }
 
                 dup2(pipe_stdout[1], 1);
                 dup2(pipe_stderr[1], 2);
 
-                close(pipe_stdout[1]);
-                close(pipe_stderr[1]);
+                match self.close(pipe_stdout[1]) {
+                    Ok(()) => {},
+                    Err(err) => return Err(err)
+                }
+
+                match self.close(pipe_stderr[1]) {
+                    Ok(()) => {},
+                    Err(err) => return Err(err)
+                }
                 
                 let mut cstrings: Vec<CString> = Vec::new();
                 match CString::new(command) {
@@ -95,10 +108,16 @@ impl ProcessController {
                 return Err("Could not start the process!".to_string());
             }
         }
-        unsafe {
-            close(pipe_stdout[1]);
-            close(pipe_stderr[1]);
+        match self.close(pipe_stdout[1]) {
+            Ok(()) => {},
+            Err(err) => return Err(err)
         }
+
+        match self.close(pipe_stderr[1]) {
+            Ok(()) => {},
+            Err(err) => return Err(err)
+        }
+
         Ok((pipe_stdout[0], pipe_stderr[0]))
     }
 
@@ -181,6 +200,40 @@ impl ProcessController {
         unsafe {
             let wait_res = waitpid(self.process_id, &raw mut stat, flags);
             (stat, wait_res)
+        }
+    }
+
+    /// Closes a fildes.
+    /// 
+    /// # Param 1
+    /// fildes - `i32` - The fildes to close.
+    /// 
+    /// # Returns
+    /// `Result<(), String>`
+    /// # Errors
+    #[cfg(unix)]
+    pub fn close(&self, fildes: i32) -> Result<(), String> {
+        unsafe extern "C" {
+            fn close(fildes: i32) -> i32;
+        }
+
+        unsafe {
+            if close(fildes) != 0 {
+                return Err("Failed to close fildes".to_string());
+            }
+        };
+        Ok(())
+    }
+
+    #[cfg(unix)]
+    #[must_use]
+    pub fn duplicate(&self, fildes: i32) -> i32 {
+        unsafe extern "C" {
+            fn dup(fildes: i32) -> i32;
+        }
+        
+        unsafe {
+            dup(fildes)
         }
     }
 
