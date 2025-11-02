@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import subprocess
 
-from src.dataclass.process import ProcessInfo
+from src.dataclasses.process import ProcessInfo
 
 
 @dataclass

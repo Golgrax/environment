@@ -21,7 +21,7 @@ The goal is to offer developers a familiar, reliable, and cross-language API des
 
 /packages/
 ├── node/          → TypeScript / Node.js implementation
-├── python/        → Python implementation
+├── python/        → Python module
 ├── rust/          → Rust crate
 ├── go/            → Go module
 ├── csharp/        → .NET / C# library
