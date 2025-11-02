@@ -58,3 +58,34 @@ tmp/
 
 archives/
 storage/
+
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Packaging metadata
+*.egg-info/
+packages/python/dist/
+packages/python/build/
+
+# Virtual environments
+.venv/
+venv/
+packages/python/env/
+
+# UV build cache
+.uv/
+.uv_cache/
+
+# Logs, coverage, testing
+*.log
+coverage/
+.tox/
+.nox/
+pytest_cache/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
