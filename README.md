@@ -74,7 +74,7 @@ A complete documentation site with:
 | Language | Status | Package Manager |
 |-----------|:-------:|----------------|
 | Node.js (TypeScript) | Active | pnpm |
-| Python | In Progress | Poetry |
+| Python | In Progress | uv |
 | Rust | In Progress | Cargo |
 | Go | In Progress | go mod |
 | C# (.NET) | In Progress | dotnet CLI |
