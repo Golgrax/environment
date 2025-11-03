@@ -57,6 +57,6 @@ class ProcessController:
         self, process: subprocess.Popen[str] | subprocess.Popen[bytes]
     ) -> bool:
         """Checks whether or not a process is running"""
-        if not process.pid or process.returncode:
-            return False
-        return True
+        if process.poll() is None:  # returns None if the process isn't done yet
+            return True
+        return False

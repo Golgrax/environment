@@ -1,3 +1,10 @@
+# Version 0.0.4
+
+### Minor Changes
+
+- simplified `ProcessController.is_running()` to use a polling method
+
+
 # Version 0.0.3
 
 ## Additions
