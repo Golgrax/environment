@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { accessSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { constants } from "node:fs/promises";
-
+import * as os from "node:os";
 import { Platform } from "@/types/global";
 import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
 
@@ -71,6 +71,27 @@ class SystemEnvironment<
       default:
         return options?.defaultValue;
     }
+  }
+
+  public getOS(): string {
+    return os.platform();
+  }
+
+  public getCPU(): { model: string; speed: number } {
+    const cpus = os.cpus();
+    if (cpus.length > 0) {
+      return { model: cpus[0].model, speed: cpus[0].speed };
+    }
+    return { model: "unknown", speed: 0 };
+  }
+
+  /**
+   * Returns the memory information.
+   *
+   * @returns The memory information.
+   */
+  public getMemory(): { total: number; free: number } {
+    return { total: os.totalmem(), free: os.freemem() };
   }
 
   /**
