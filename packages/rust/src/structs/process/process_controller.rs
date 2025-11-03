@@ -144,7 +144,6 @@ impl ProcessController {
                 return Err("Could not kill process!".to_string());
             }
         };
-        self.process_id = -1;
         Ok(())
     }
 
