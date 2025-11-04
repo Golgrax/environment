@@ -2,9 +2,15 @@ LICENSE
 README.md
 pyproject.toml
 environment/__init__.py
+environment/process.py
+environment/process_environment.py
 environment/system_environment.py
+environment/user_environment.py
 environment_pyython.egg-info/PKG-INFO
 environment_pyython.egg-info/SOURCES.txt
 environment_pyython.egg-info/dependency_links.txt
 environment_pyython.egg-info/top_level.txt
+tests/test_process.py
+tests/test_process_environment.py
 tests/test_system_environment.py
+tests/test_user_environment.py

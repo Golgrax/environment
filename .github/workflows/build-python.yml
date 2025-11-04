@@ -24,6 +24,10 @@ jobs:
       - name: Install dependencies
         run: pip install pytest
 
+      - name: Install local package
+        run: pip install -e .
+        working-directory: packages/python
+
       - name: Test with pytest
         run: pytest
         working-directory: packages/python

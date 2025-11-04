@@ -10,12 +10,10 @@ importers:
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
-        version: 29.5.14      '@types/jest':
-        specifier: ^29.5.12
         version: 29.5.14
       '@types/node':
         specifier: ^24.7.2
-        version: 24.10.0
+        version: 24.9.1
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
@@ -633,10 +631,6 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-<<<<<<< HEAD
-  '@types/node@24.10.0':
-    resolution: {integrity: sha512-qzQZRBqkFsYyaSWXuEHc2WR9c0a0CXwiE5FWUvn7ZM+vdy1uZLfCunD38UzhuB7YN/J11ndbDBcTmOdxJo9Q7A==}
-=======
   '@types/graceful-fs@4.1.9':
     resolution: {integrity: sha512-olP3sd1qOEe5dXTSaFvQG+02VdRXcdytWLAZsAq1PecU8uqQAhkrnbli7DagjtXKW/Bl7YJbUsa8MPcuc8LHEQ==}
 
@@ -654,7 +648,6 @@ packages:
 
   '@types/node@24.9.1':
     resolution: {integrity: sha512-QoiaXANRkSXK6p0Duvt56W208du4P9Uye9hWLWgGMDTEoKPhuenzNcC4vGUmrNkiOKTlIrBoyNQYNpSwfEZXSg==}
->>>>>>> fd9888b (feat: Enhance cross-language environment APIs and testing infrastructure ✨)
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -2569,9 +2562,6 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-<<<<<<< HEAD
-  '@types/node@24.10.0':
-=======
   '@types/graceful-fs@4.1.9':
     dependencies:
       '@types/node': 24.9.1
@@ -2592,7 +2582,6 @@ snapshots:
       pretty-format: 29.7.0
 
   '@types/node@24.9.1':
->>>>>>> fd9888b (feat: Enhance cross-language environment APIs and testing infrastructure ✨)
     dependencies:
       undici-types: 7.16.0
 
