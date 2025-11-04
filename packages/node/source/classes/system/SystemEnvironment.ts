@@ -11,6 +11,22 @@ import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
  *
  * Requires elevated (admin/root) permissions for write operations.
  *
+ * @example
+ * ```typescript
+ * const systemEnv = new SystemEnvironment(process.platform);
+ *
+ * // Get a system variable
+ * const path = systemEnv.get("PATH");
+ * console.log(`System PATH is: ${path}`);
+ *
+ * // Set a new system variable (requires admin privileges)
+ * // systemEnv.set("MY_SYSTEM_VAR", "hello world");
+ *
+ * // Get OS and hardware info
+ * console.log(`OS: ${systemEnv.getOS()}`);
+ * console.log(`CPU: ${JSON.stringify(systemEnv.getCPU())}`);
+ * ```
+ *
  * @template S - The abstract environment schema.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/system-environment.md)
  */
@@ -20,6 +36,10 @@ class SystemEnvironment<
   /** The platform to base operations on. */
   public platform: Platform;
 
+  /**
+   * Creates an instance of the SystemEnvironment class.
+   * @param platform The operating system platform to use.
+   */
   constructor(platform: Platform) {
     this.platform = platform;
   }
@@ -29,26 +49,32 @@ class SystemEnvironment<
    * Retrieves the value of a system environment variable.
    *
    * @param name - The name of the environment variable to retrieve.
-   * @param options - Optional options for the operation.
+   * @param options - Optional settings for the operation.
+   * @param options.defaultValue - A fallback value to return if the variable is not found.
+   * @param options.type - (Windows only) The registry value type to query.
    * @returns The value of the environment variable, or the default value if not found.
    */
   public get<K extends keyof S>(
     name: K,
     options?: { defaultValue?: S[K]; type?: WindowsRegistryType },
   ): S[K] | undefined {
+    const varName = String(name);
     switch (this.platform) {
       case Platform.Windows: {
         const response = spawnSync(
           "reg",
-          ["query", WindowsRegistry.HKLM, "/v", name as string],
-          { stdio: ["pipe", "pipe", "pipe"], encoding: "utf-8" },
+          ["query", WindowsRegistry.HKLM, "/v", varName],
+          {
+            stdio: ["pipe", "pipe", "pipe"],
+            encoding: "utf-8",
+          },
         );
 
         if (response.status !== 0) return options?.defaultValue;
 
         const line = response.stdout
           .split("\n")
-          .find((l) => l.includes(name as string));
+          .find((l) => l.includes(varName));
 
         if (!line) return options?.defaultValue;
 
@@ -62,7 +88,7 @@ class SystemEnvironment<
         if (!existsSync(envFile)) return options?.defaultValue;
 
         const content = readFileSync(envFile, "utf-8");
-        const regex = new RegExp(`^${name as string}=["']?(.+?)["']?$`, "m");
+        const regex = new RegExp(`^${varName}=["']?(.+?)["']?$`, "m");
         const match = content.match(regex);
 
         return match ? (match[1] as S[K]) : options?.defaultValue;
@@ -73,10 +99,18 @@ class SystemEnvironment<
     }
   }
 
+  /**
+   * Gets the operating system platform (e.g., 'win32', 'linux').
+   * @returns The operating system platform.
+   */
   public getOS(): string {
     return os.platform();
   }
 
+  /**
+   * Gets information about the system's CPU.
+   * @returns An object containing the CPU model and speed, or default values if not available.
+   */
   public getCPU(): { model: string; speed: number } {
     const cpus = os.cpus();
     if (cpus.length > 0) {
@@ -86,37 +120,41 @@ class SystemEnvironment<
   }
 
   /**
-   * Returns the memory information.
+   * Gets information about the system's memory.
    *
-   * @returns The memory information.
+   * @returns An object containing the total and free system memory in bytes.
    */
   public getMemory(): { total: number; free: number } {
     return { total: os.totalmem(), free: os.freemem() };
   }
 
   /**
-   * Sets a system environment variable.
+   * Sets a system environment variable. **Requires admin/root privileges.**
    *
    * @param name - The name of the environment variable to set.
    * @param value - The value to set for the environment variable.
-   * @param options - Optional options for the operation.
+   * @param options - Optional settings for the operation.
+   * @param options.type - (Windows only) The registry value type to create.
    */
   public set<K extends keyof S>(
     name: K,
     value: S[K],
     options?: { type?: WindowsRegistryType },
   ): void {
+    const varName = String(name);
+    const varValue = String(value);
+
     switch (this.platform) {
       case Platform.Windows: {
         const args = [
           "add",
           WindowsRegistry.HKLM,
           "/v",
-          `${name as string}`,
+          varName,
           "/t",
           `${options?.type || WindowsRegistryType.REG_EXPAND_SZ}`,
           "/d",
-          `${value as string}`,
+          varValue,
           "/f",
         ];
 
@@ -138,16 +176,12 @@ class SystemEnvironment<
         const envFile = "/etc/environment";
         let content = existsSync(envFile) ? readFileSync(envFile, "utf-8") : "";
 
-        const varName = name as string;
         const regex = new RegExp(`^${varName}=.*$`, "m");
 
         if (regex.test(content)) {
-          content = content.replace(
-            regex,
-            `${varName}="${(value as string).replace(/"/g, '\\"')}"`,
-          );
+          content = content.replace(regex, `${varName}="${varValue.replace(/"/g, '\\"')}"`);
         } else {
-          content += `\n${varName}="${(value as string).replace(/"/g, '\\"')}"`;
+          content += `\n${varName}="${varValue.replace(/"/g, '\\"')}"`;
         }
 
         if (!this.canWriteFile(envFile)) {
@@ -167,17 +201,21 @@ class SystemEnvironment<
   }
 
   /**
-   * Removes a system environment variable.
+   * Removes a system environment variable. **Requires admin/root privileges.**
    *
    * @param name The name of the environment variable to remove.
    */
   public remove<K extends keyof S>(name: K): void {
+    const varName = String(name);
     switch (this.platform) {
       case Platform.Windows: {
         const response = spawnSync(
           "reg",
-          ["delete", WindowsRegistry.HKLM, "/v", name as string, "/f"],
-          { stdio: ["ignore", "pipe", "pipe"], encoding: "utf-8" },
+          ["delete", WindowsRegistry.HKLM, "/v", varName, "/f"],
+          {
+            stdio: ["ignore", "pipe", "pipe"],
+            encoding: "utf-8",
+          },
         );
 
         if (response.status !== 0) {
@@ -195,7 +233,7 @@ class SystemEnvironment<
         const content = readFileSync(envFile, "utf-8");
         const filtered = content
           .split("\n")
-          .filter((line) => !line.startsWith(`${name as string}=`))
+          .filter((line) => !line.startsWith(`${varName}=`))
           .join("\n");
 
         if (!this.canWriteFile(envFile)) {
@@ -215,7 +253,7 @@ class SystemEnvironment<
   /**
    * Lists all system environment variable keys.
    *
-   * @returns An array of keys representing the system environment variables.
+   * @returns An array of keys for the system environment variables.
    */
   public listKeys(): (keyof S)[] {
     switch (this.platform) {
@@ -256,7 +294,7 @@ class SystemEnvironment<
   /**
    * Lists all system environment variable values.
    *
-   * @returns An array of values representing the system environment variables.
+   * @returns An array of values for the system environment variables.
    */
   public listValues(): S[keyof S][] {
     const keys = this.listKeys();
@@ -274,7 +312,8 @@ class SystemEnvironment<
 
   //#region File Operations
   /**
-   * Exports all system environment variables to a file (e.g. JSON backup).
+   * Exports all system environment variables to a file (e.g., for a JSON backup).
+   * @param path The absolute or relative path to save the file to. Defaults to `./system-environment-[platform].json`.
    */
   public async saveToFile(path?: string): Promise<void> {
     const fs = await import("fs/promises");
@@ -295,9 +334,11 @@ class SystemEnvironment<
 
   //#region Internal Methods
   /**
-   * Checks whether the file exists and is writable.
+   * Checks whether the current process has write permissions for a file.
    *
-   * @internal This method is used internally by this class, it is not intended for external use.
+   * @internal This method is used internally and is not intended for external use.
+   * @param path The path to the file to check.
+   * @returns `true` if the file is writable, `false` otherwise.
    */
   private canWriteFile(path: string): boolean {
     try {

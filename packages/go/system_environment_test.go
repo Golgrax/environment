@@ -1,19 +1,21 @@
-package environment
+package environment_test
 
 import (
 	"runtime"
 	"testing"
+
+	"github.com/octovel/environment/go/environment"
 )
 
 func TestSystemEnvironment(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	if se.Platform == "" {
 		t.Error("Expected Platform to be set")
 	}
 }
 
 func TestGetOS(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	os := se.GetOS()
 	if os != runtime.GOOS {
 		t.Errorf("Expected OS to be %s, got %s", runtime.GOOS, os)
@@ -21,7 +23,7 @@ func TestGetOS(t *testing.T) {
 }
 
 func TestGetCPU(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	cpu, err := se.GetCPU()
 	if err != nil {
 		t.Errorf("Error getting CPU: %s", err)
@@ -32,7 +34,7 @@ func TestGetCPU(t *testing.T) {
 }
 
 func TestGetMemory(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	memory, err := se.GetMemory()
 	if err != nil {
 		t.Errorf("Error getting memory: %s", err)
@@ -43,7 +45,7 @@ func TestGetMemory(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	// This test assumes a common environment variable like PATH exists
 	val, err := se.Get("PATH")
 	if err != nil {
@@ -55,7 +57,7 @@ func TestGet(t *testing.T) {
 }
 
 func TestListKeys(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	keys, err := se.ListKeys()
 	if err != nil {
 		t.Errorf("Error listing keys: %s", err)
@@ -69,7 +71,7 @@ func TestListKeys(t *testing.T) {
 }
 
 func TestListValues(t *testing.T) {
-	se := NewSystemEnvironment()
+	se := environment.NewSystemEnvironment()
 	values, err := se.ListValues()
 	if err != nil {
 		t.Errorf("Error listing values: %s", err)

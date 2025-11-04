@@ -1,10 +1,12 @@
-package environment
+package environment_test
 
 import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/octovel/environment/go/environment"
 )
 
 func TestUserEnvironment(t *testing.T) {
@@ -27,7 +29,7 @@ func TestUserEnvironment(t *testing.T) {
 	os.Setenv("HOME", tmpDir)
 	defer os.Setenv("HOME", originalHome)
 
-	ue := UserEnvironment{}
+	ue := environment.UserEnvironment{}
 
 	// Test Set
 	err = ue.Set("TEST_VAR", "test_value")

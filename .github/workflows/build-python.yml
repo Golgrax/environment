@@ -1,0 +1,29 @@
+name: Build Python
+
+on:
+  push:
+    branches:
+      - canary
+      - stable
+  pull_request:
+    branches:
+      - canary
+      - stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Test with pytest
+        run: pytest
+        working-directory: packages/python

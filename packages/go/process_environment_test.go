@@ -1,13 +1,15 @@
-package environment
+package environment_test
 
 import (
 	"os"
 	"os/user"
 	"testing"
+
+	"github.com/octovel/environment/go/environment"
 )
 
 func TestGetUserName(t *testing.T) {
-	username, err := GetUserName()
+	username, err := environment.GetUserName()
 	if err != nil {
 		t.Errorf("Error getting username: %s", err)
 	}
@@ -23,7 +25,7 @@ func TestGetUserName(t *testing.T) {
 }
 
 func TestGetHomeDirectory(t *testing.T) {
-	home, err := GetHomeDirectory()
+	home, err := environment.GetHomeDirectory()
 	if err != nil {
 		t.Errorf("Error getting home directory: %s", err)
 	}
