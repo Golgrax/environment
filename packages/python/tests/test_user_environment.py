@@ -22,12 +22,12 @@ class TestUserEnvironment(unittest.TestCase):
         self.ue.set("ANOTHER_VAR", "another_value")
         self.assertEqual(self.ue.get("ANOTHER_VAR"), "another_value")
 
-        self.assertCountEqual(self.ue.listKeys(), ["TEST_VAR", "ANOTHER_VAR"])
-        self.assertCountEqual(self.ue.listValues(), ["test_value", "another_value"])
+        self.assertCountEqual(self.ue.list_keys(), ["TEST_VAR", "ANOTHER_VAR"])
+        self.assertCountEqual(self.ue.list_values(), ["test_value", "another_value"])
 
         self.ue.remove("TEST_VAR")
         self.assertIsNone(self.ue.get("TEST_VAR"))
-        self.assertEqual(self.ue.listKeys(), ["ANOTHER_VAR"])
+        self.assertEqual(self.ue.list_keys(), ["ANOTHER_VAR"])
 
 if __name__ == '__main__':
     unittest.main()

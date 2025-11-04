@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import * as os from 'node:os';
 
-// Mock child_process and fs modules
+// Mock the node:child_process, node:fs, and node:os modules for consistent testing.
 jest.mock('node:child_process');
 jest.mock('node:fs');
 jest.mock('node:os');
@@ -13,6 +13,7 @@ jest.mock('node:os');
 describe('SystemEnvironment', () => {
   let systemEnvironment: SystemEnvironment;
 
+  // Before each test, clear all mocks and reset the environment to a clean Linux state.
   beforeEach(() => {
     jest.clearAllMocks();
     systemEnvironment = new SystemEnvironment(Platform.Linux);
@@ -23,22 +24,7 @@ describe('SystemEnvironment', () => {
     (os.freemem as jest.Mock).mockReturnValue(512);
   });
 
-  it('should return the value of a system environment variable for Linux', () => {
-    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\n');
-    const value = systemEnvironment.get('MY_VAR');
-    expect(value).toBe('my_value');
-  });
-
-  it('should return the value of a system environment variable for Windows', () => {
-    systemEnvironment.platform = Platform.Windows;
-    (spawnSync as jest.Mock).mockReturnValue({
-      status: 0,
-      stdout: '\n    MY_VAR    REG_SZ    my_value\n',
-    });
-    const value = systemEnvironment.get('MY_VAR');
-    expect(value).toBe('my_value');
-  });
-
+  // --- Generic tests (platform-independent behavior) ---
   it('should return undefined if the environment variable is not found', () => {
     (readFileSync as jest.Mock).mockReturnValue('OTHER_VAR="other_value"\n');
     const value = systemEnvironment.get('NON_EXISTENT_VAR');
@@ -66,11 +52,48 @@ describe('SystemEnvironment', () => {
     expect(memory).toEqual({ total: 1024, free: 512 });
   });
 
+  // --- Linux-specific tests ---
+  it('should return the value of a system environment variable for Linux', () => {
+    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\n');
+    const value = systemEnvironment.get('MY_VAR');
+    expect(value).toBe('my_value');
+  });
+
   it('should set a system environment variable for Linux', () => {
     (readFileSync as jest.Mock).mockReturnValue('');
     const writeFileSync = jest.spyOn(require('node:fs'), 'writeFileSync');
     systemEnvironment.set('MY_VAR', 'my_value');
     expect(writeFileSync).toHaveBeenCalledWith('/etc/environment', 'MY_VAR="my_value"\n', 'utf-8');
+  });
+
+  it('should remove a system environment variable for Linux', () => {
+    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\n');
+    const writeFileSync = jest.spyOn(require('node:fs'), 'writeFileSync');
+    systemEnvironment.remove('MY_VAR');
+    expect(writeFileSync).toHaveBeenCalledWith('/etc/environment', '\n', 'utf-8');
+  });
+
+  it('should list the keys of system environment variables for Linux', () => {
+    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\nANOTHER_VAR="another_value"\n');
+    const keys = systemEnvironment.listKeys();
+    expect(keys).toEqual(['MY_VAR', 'ANOTHER_VAR']);
+  });
+
+  it('should list the values of system environment variables for Linux', () => {
+    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\nANOTHER_VAR="another_value"\n');
+    const values = systemEnvironment.listValues();
+    expect(values).toEqual(['my_value', 'another_value']);
+  });
+
+  // --- Windows-specific tests ---
+  it('should return the value of a system environment variable for Windows', () => {
+    systemEnvironment.platform = Platform.Windows;
+    (spawnSync as jest.Mock).mockReturnValue({
+      status: 0,
+      stdout: '\n    MY_VAR    REG_SZ    my_value\n',
+    });
+    const value = systemEnvironment.get('MY_VAR');
+    expect(value).toBe('my_value');
   });
 
   it('should set a system environment variable for Windows', () => {
@@ -94,13 +117,6 @@ describe('SystemEnvironment', () => {
     });
   });
 
-  it('should remove a system environment variable for Linux', () => {
-    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\n');
-    const writeFileSync = jest.spyOn(require('node:fs'), 'writeFileSync');
-    systemEnvironment.remove('MY_VAR');
-    expect(writeFileSync).toHaveBeenCalledWith('/etc/environment', '\n', 'utf-8');
-  });
-
   it('should remove a system environment variable for Windows', () => {
     systemEnvironment.platform = Platform.Windows;
     const spawnSync = jest.spyOn(require('node:child_process'), 'spawnSync');
@@ -117,12 +133,6 @@ describe('SystemEnvironment', () => {
     });
   });
 
-  it('should list the keys of system environment variables for Linux', () => {
-    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\nANOTHER_VAR="another_value"\n');
-    const keys = systemEnvironment.listKeys();
-    expect(keys).toEqual(['MY_VAR', 'ANOTHER_VAR']);
-  });
-
   it('should list the keys of system environment variables for Windows', () => {
     systemEnvironment.platform = Platform.Windows;
     (spawnSync as jest.Mock).mockReturnValue({
@@ -131,12 +141,6 @@ describe('SystemEnvironment', () => {
     });
     const keys = systemEnvironment.listKeys();
     expect(keys).toEqual(['MY_VAR', 'ANOTHER_VAR']);
-  });
-
-  it('should list the values of system environment variables for Linux', () => {
-    (readFileSync as jest.Mock).mockReturnValue('MY_VAR="my_value"\nANOTHER_VAR="another_value"\n');
-    const values = systemEnvironment.listValues();
-    expect(values).toEqual(['my_value', 'another_value']);
   });
 
   it('should list the values of system environment variables for Windows', () => {

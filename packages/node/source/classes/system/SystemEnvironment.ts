@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { accessSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { constants } from "node:fs/promises";
-import * as os from "node:os";
+import { cpus, freemem, platform, totalmem } from "node:os";
 import { Platform } from "@/types/global";
 import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
 
@@ -104,7 +104,7 @@ class SystemEnvironment<
    * @returns The operating system platform.
    */
   public getOS(): string {
-    return os.platform();
+    return platform();
   }
 
   /**
@@ -112,9 +112,9 @@ class SystemEnvironment<
    * @returns An object containing the CPU model and speed, or default values if not available.
    */
   public getCPU(): { model: string; speed: number } {
-    const cpus = os.cpus();
-    if (cpus.length > 0) {
-      return { model: cpus[0].model, speed: cpus[0].speed };
+    const cpusList = cpus();
+    if (cpusList.length > 0) {
+      return { model: cpusList[0].model, speed: cpusList[0].speed };
     }
     return { model: "unknown", speed: 0 };
   }
@@ -125,7 +125,7 @@ class SystemEnvironment<
    * @returns An object containing the total and free system memory in bytes.
    */
   public getMemory(): { total: number; free: number } {
-    return { total: os.totalmem(), free: os.freemem() };
+    return { total: totalmem(), free: freemem() };
   }
 
   /**
@@ -312,8 +312,13 @@ class SystemEnvironment<
 
   //#region File Operations
   /**
-   * Exports all system environment variables to a file (e.g., for a JSON backup).
-   * @param path The absolute or relative path to save the file to. Defaults to `./system-environment-[platform].json`.
+   * Exports all system environment variables to a file.
+   *
+   * This can be useful for creating backups or sharing configurations.
+   * The output file will be in JSON format.
+   *
+   * @param path The absolute or relative path to save the file to.
+   * If not provided, it defaults to `./system-environment-[platform].json`.
    */
   public async saveToFile(path?: string): Promise<void> {
     const fs = await import("fs/promises");

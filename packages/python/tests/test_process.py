@@ -14,8 +14,6 @@ class TestProcess(unittest.TestCase):
     def test_get_command_line_arguments(self):
         self.assertEqual(self.p.get_command_line_arguments(), sys.argv)
 
-    def test_get_memory_usage(self):
-        self.assertIsNotNone(self.p.get_memory_usage())
 
 if __name__ == '__main__':
     unittest.main()

@@ -364,10 +364,13 @@ class UserEnvironment<
 
   //#region File Operations
   /**
-   * Saves the current user environment variables to a file.
+   * Exports all user environment variables to a file.
    *
-   * @param path The path to the file to save to. Defaults to `./user-environment-[platform].json`.
-   * @returns A promise that resolves when the file has been saved.
+   * This can be useful for creating backups or sharing configurations.
+   * The output file will be in JSON format.
+   *
+   * @param path The absolute or relative path to save the file to.
+   * If not provided, it defaults to `./user-environment-[platform].json`.
    */
   public async saveToFile(path?: string): Promise<void> {
     const fs = await import("fs/promises");

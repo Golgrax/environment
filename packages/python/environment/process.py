@@ -1,14 +1,25 @@
 import os
-import sys
-import psutil
 
 class Process:
-    def get_process_id(self):
+    """Provides methods for retrieving information about the current process.
+    """
+
+    def get_process_id(self) -> int:
+        """Retrieves the process ID (PID) of the current process.
+
+        Returns:
+            int: The process ID of the current process.
+        """
         return os.getpid()
 
-    def get_command_line_arguments(self):
-        return sys.argv
+    def get_command_line_arguments(self) -> list[str]:
+        """Retrieves the command-line arguments of the current process.
 
-    def get_memory_usage(self):
-        process = psutil.Process(self.get_process_id())
-        return process.memory_info()
+        Returns:
+            list[str]: A list of strings representing the command-line arguments.
+                       The first element is typically the script name.
+        """
+        return os.sys.argv
+
+
+

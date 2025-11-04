@@ -1,99 +1,147 @@
-import platform
-import subprocess
 import os
+import subprocess
 
 class UserEnvironment:
-    def __init__(self):
-        self.platform = platform.system()
+    """Provides methods for managing user-level environment variables.
 
-    def getOS(self):
-        return self.platform
+    This class interacts with the user's shell configuration files (e.g., .bashrc)
+    to set, get, and remove environment variables. It is designed to be
+    cross-platform, though current implementation details might be Linux/macOS-centric.
+    """
 
-    def getCPU(self):
-        if self.platform == "Linux":
-            # This is a simplified way to get CPU info on Linux
-            with open("/proc/cpuinfo") as f:
-                for line in f:
-                    if "model name" in line:
-                        return {"model": line.split(":")[1].strip(), "speed": 0}
-        elif self.platform == "Darwin":
-            # This is a simplified way to get CPU info on macOS
-            return {"model": subprocess.check_output(["sysctl", "-n", "machdep.cpu.brand_string"]).decode().strip(), "speed": 0}
-        return {"model": "unknown", "speed": 0}
+    def _get_rc_file_path(self) -> str:
+        """Determines the appropriate shell configuration file path for the current user.
 
-    def getMemory(self):
-        if self.platform == "Linux":
-            with open("/proc/meminfo") as f:
-                lines = f.readlines()
-                total = int(lines[0].split()[1])
-                free = int(lines[1].split()[1])
-                return {"total": total, "free": free}
-        # Simplified for other platforms
-        return {"total": 0, "free": 0}
+        This method attempts to identify the user's shell and return the path to its
+        corresponding RC file (e.g., ~/.bashrc, ~/.zshrc).
 
-    def get(self, name, default_value=None):
-        env_file = os.path.expanduser("~/.bashrc")
-        if not os.path.exists(env_file):
-            return default_value
-        with open(env_file) as f:
+        Returns:
+            str: The absolute path to the shell's RC file.
+        """
+        shell = os.environ.get("SHELL", "/bin/bash")
+        home_dir = os.path.expanduser("~/")
+
+        if "bash" in shell:
+            return os.path.join(home_dir, ".bashrc")
+        elif "zsh" in shell:
+            return os.path.join(home_dir, ".zshrc")
+        # Add more shell detections as needed
+        return os.path.join(home_dir, ".profile")
+
+    def get(self, name: str) -> str or None:
+        """Retrieves the value of a user environment variable.
+
+        This method reads the user's shell configuration file to find the specified
+        environment variable. It looks for lines in the format 'export NAME="value"'.
+
+        Args:
+            name (str): The name of the environment variable to retrieve.
+
+        Returns:
+            str or None: The value of the environment variable if found, otherwise None.
+        """
+        rc_file_path = self._get_rc_file_path()
+        if not os.path.exists(rc_file_path):
+            return None
+
+        with open(rc_file_path, "r") as f:
             for line in f:
-                if line.startswith(f"export {name}="):
-                    return line.split("=")[1].strip().strip('"')
-        return default_value
+                if line.strip().startswith(f"export {name}="):
+                    # Extract the value, removing quotes
+                    return line.split("=", 1)[1].strip().strip('"\'')
+        return None
 
-    def set(self, name, value):
-        env_file = os.path.expanduser("~/.bashrc")
+    def set(self, name: str, value: str):
+        """Sets or updates a user environment variable.
+
+        This method modifies the user's shell configuration file. If the variable
+        already exists, its value is updated. If not, a new 'export' line is added.
+
+        Args:
+            name (str): The name of the environment variable to set.
+            value (str): The value to assign to the environment variable.
+        """
+        rc_file_path = self._get_rc_file_path()
         lines = []
-        if os.path.exists(env_file):
-            with open(env_file, "r") as f:
-                lines = f.readlines()
-        
-        new_line = f'export {name}="{value}"\n'
         found = False
-        for i, line in enumerate(lines):
-            if line.startswith(f"export {name}="):
-                lines[i] = new_line
-                found = True
-                break
+
+        if os.path.exists(rc_file_path):
+            with open(rc_file_path, "r") as f:
+                for line in f:
+                    if line.strip().startswith(f"export {name}="):
+                        lines.append(f"export {name}=\"{value}\"\n")
+                        found = True
+                    else:
+                        lines.append(line)
         
         if not found:
-            lines.append(new_line)
+            lines.append(f"export {name}=\"{value}\"\n")
 
-        with open(env_file, "w") as f:
+        with open(rc_file_path, "w") as f:
             f.writelines(lines)
 
-    def remove(self, name):
-        env_file = os.path.expanduser("~/.bashrc")
-        if not os.path.exists(env_file):
-            return
-        with open(env_file, "r") as f:
-            lines = f.readlines()
-        with open(env_file, "w") as f:
-            for line in lines:
-                if not line.startswith(f"export {name}="):
-                    f.write(line)
+    def remove(self, name: str):
+        """Removes a user environment variable.
 
-    def listKeys(self):
-        keys = []
-        env_file = os.path.expanduser("~/.bashrc")
-        if not os.path.exists(env_file):
-            return keys
-        with open(env_file) as f:
+        This method deletes the corresponding 'export' line from the user's
+        shell configuration file.
+
+        Args:
+            name (str): The name of the environment variable to remove.
+        """
+        rc_file_path = self._get_rc_file_path()
+        if not os.path.exists(rc_file_path):
+            return
+
+        lines = []
+        with open(rc_file_path, "r") as f:
             for line in f:
-                if line.startswith("export "):
-                    parts = line.split(" ", 1)[1].split("=", 1)
-                    keys.append(parts[0])
+                if not line.strip().startswith(f"export {name}="):
+                    lines.append(line)
+        
+        with open(rc_file_path, "w") as f:
+            f.writelines(lines)
+
+    def list_keys(self) -> list[str]:
+        """Lists all user-level environment variable keys.
+
+        This method parses the user's shell configuration file to find all
+        defined environment variable names.
+
+        Returns:
+            list[str]: A list of environment variable names.
+        """
+        rc_file_path = self._get_rc_file_path()
+        keys = []
+        if not os.path.exists(rc_file_path):
+            return keys
+
+        with open(rc_file_path, "r") as f:
+            for line in f:
+                if line.strip().startswith("export "):
+                    parts = line.split("=", 1)
+                    if len(parts) > 0:
+                        keys.append(parts[0].replace("export ", "").strip())
         return keys
 
-    def listValues(self):
+    def list_values(self) -> list[str]:
+        """Lists all user-level environment variable values.
+
+        This method parses the user's shell configuration file to find all
+        defined environment variable values.
+
+        Returns:
+            list[str]: A list of environment variable values.
+        """
+        rc_file_path = self._get_rc_file_path()
         values = []
-        env_file = os.path.expanduser("~/.bashrc")
-        if not os.path.exists(env_file):
+        if not os.path.exists(rc_file_path):
             return values
-        with open(env_file) as f:
+
+        with open(rc_file_path, "r") as f:
             for line in f:
-                if line.startswith("export "):
+                if line.strip().startswith("export "):
                     parts = line.split("=", 1)
                     if len(parts) > 1:
-                        values.append(parts[1].strip().strip('"'))
+                        values.append(parts[1].strip().strip('\"\''))
         return values

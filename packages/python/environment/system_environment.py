@@ -1,84 +1,58 @@
 import platform
-import os
-import psutil
 
 class SystemEnvironment:
-    def __init__(self, platform_os=None):
-        self.platform = platform_os or platform.system()
-        if self.platform not in ["Linux", "Darwin"]:
-            raise NotImplementedError(f"SystemEnvironment is not implemented for {self.platform}")
-        self.env_file = "/etc/environment"
+    """Provides methods for managing system-level environment information.
 
-    def getOS(self):
-        return self.platform
+    This class abstracts platform-specific details for retrieving system
+    information like OS, CPU, and memory. On Linux, it directly parses
+    /proc filesystem entries to avoid external dependencies.
+    """
 
-    def getCPU(self):
-        return {"model": platform.processor(), "cores": psutil.cpu_count(logical=False), "speed": psutil.cpu_freq().current}
+    def get_os(self) -> str:
+        """Retrieves the operating system name.
 
-    def getMemory(self):
-        mem = psutil.virtual_memory()
-        return {"total": mem.total, "free": mem.free}
+        Returns:
+            str: The name of the operating system (e.g., 'Linux', 'Windows').
+        """
+        return platform.system()
 
-    def get(self, name, default_value=None):
-        if not os.path.exists(self.env_file):
-            return default_value
-        with open(self.env_file) as f:
-            for line in f:
-                if line.startswith(f"{name}="):
-                    return line.split("=")[1].strip().strip('"')
-        return default_value
+    def get_cpu_info(self) -> dict:
+        """Retrieves CPU information.
 
-    def set(self, name, value):
-        # Note: This requires sudo permissions
-        lines = []
-        if os.path.exists(self.env_file):
-            with open(self.env_file, "r") as f:
-                lines = f.readlines()
-        
-        new_line = f'{name}="{value}"\n'
-        found = False
-        for i, line in enumerate(lines):
-            if line.startswith(f"{name}="):
-                lines[i] = new_line
-                found = True
-                break
-        
-        if not found:
-            lines.append(new_line)
+        On Linux, this method parses `/proc/cpuinfo` to extract the CPU model name.
+        For other platforms, it attempts to use `platform.processor()` or returns 'unknown'.
 
-        try:
-            with open(self.env_file, "w") as f:
-                f.writelines(lines)
-        except PermissionError:
-            print(f"Permission denied: Cannot write to {self.env_file}. Try running with sudo.")
+        Returns:
+            dict: A dictionary containing CPU information, typically with a 'model' key.
+        """
+        if self.get_os() == "Linux":
+            try:
+                with open("/proc/cpuinfo", "r") as f:
+                    for line in f:
+                        if "model name" in line:
+                            return {"model": line.split(":")[1].strip()}
+            except FileNotFoundError:
+                return {"model": "unknown"}
+        return {"model": platform.processor() or "unknown"}
 
-    def remove(self, name):
-        # Note: This requires sudo permissions
-        if not os.path.exists(self.env_file):
-            return
-        with open(self.env_file, "r") as f:
-            lines = f.readlines()
-        with open(self.env_file, "w") as f:
-            for line in lines:
-                if not line.startswith(f"{name}="):
-                    f.write(line)
+    def get_memory_info(self) -> dict:
+        """Retrieves system memory information.
 
-    def listKeys(self):
-        keys = []
-        if not os.path.exists(self.env_file):
-            return keys
-        with open(self.env_file) as f:
-            for line in f:
-                if "=" in line:
-                    keys.append(line.split("=")[0])
-        return keys
+        On Linux, this method parses `/proc/meminfo` to extract the total memory.
+        For other platforms, it returns 0 for total memory.
 
-    def listValues(self):
-        values = []
-        if not os.path.exists(self.env_file):
-            return values
-        with open(self.env_file) as f:
-            for line in f:
-                if "=" in line:
-                    values.append(line.split("=")[1].strip().strip('"'))
-        return values
+        Returns:
+            dict: A dictionary containing memory information, typically with a 'total' key
+                  representing total memory in bytes.
+        """
+        if self.get_os() == "Linux":
+            try:
+                with open("/proc/meminfo", "r") as f:
+                    for line in f:
+                        if "MemTotal" in line:
+                            parts = line.split()
+                            # Value is in KB, convert to bytes
+                            return {"total": int(parts[1]) * 1024}
+            except FileNotFoundError:
+                return {"total": 0}
+        return {"total": 0} # Placeholder for non-Linux

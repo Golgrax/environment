@@ -1,4 +1,4 @@
-package environment_test
+package environment
 
 import (
 	"io/ioutil"
@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/octovel/environment/go/environment"
 )
 
 func TestUserEnvironment(t *testing.T) {
@@ -24,23 +23,23 @@ func TestUserEnvironment(t *testing.T) {
 	}
 	tmpfile.Close()
 
-	// Set the HOME environment variable to the temporary directory
+	// Set the HOME variable to the temporary directory
 	originalHome := os.Getenv("HOME")
 	os.Setenv("HOME", tmpDir)
 	defer os.Setenv("HOME", originalHome)
 
-	ue := environment.UserEnvironment{}
+	ue := UserEnvironment{}
 
 	// Test Set
 	err = ue.Set("TEST_VAR", "test_value")
 	if err != nil {
-		t.Errorf("Error setting environment variable: %s", err)
+		t.Errorf("Error setting variable: %s", err)
 	}
 
 	// Test Get
 	val, err := ue.Get("TEST_VAR")
 	if err != nil {
-		t.Errorf("Error getting environment variable: %s", err)
+		t.Errorf("Error getting variable: %s", err)
 	}
 	if val != "test_value" {
 		t.Errorf("Expected value to be 'test_value', got '%s'", val)
@@ -67,13 +66,13 @@ func TestUserEnvironment(t *testing.T) {
 	// Test Remove
 	err = ue.Remove("TEST_VAR")
 	if err != nil {
-		t.Errorf("Error removing environment variable: %s", err)
+		t.Errorf("Error removing variable: %s", err)
 	}
 
 	// Verify removal
 	val, err = ue.Get("TEST_VAR")
 	if err != nil {
-		t.Errorf("Error getting environment variable after removal: %s", err)
+		t.Errorf("Error getting variable after removal: %s", err)
 	}
 	if val != "" {
 		t.Errorf("Expected value to be empty after removal, got '%s'", val)
