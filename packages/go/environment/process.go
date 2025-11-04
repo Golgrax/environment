@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-// GetProcessId returns the process ID (PID) of the currently running process.
+// GetProcessId returns the process ID (PID) of the current running process.
 // This is a direct wrapper around os.Getpid().
 func GetProcessId() int {
 	return os.Getpid()
