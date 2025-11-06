@@ -1,0 +1,29 @@
+name: Build Rust Implementation
+
+on:
+  push:
+    branches:
+      - canary
+      - stable
+    paths:
+      - "packages/rust/**"
+      - ".github/workflows/build-rust.yml"
+
+jobs:
+  build-rust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Set up Rust
+        uses: actions-rust-lang/setup-rust-toolchain@1
+
+      - name: Run Tests
+        working-directory: packages/rust
+        run: cargo test
+
+      - name: Check
+        working-directory: packages/rust
+        run: cargo check
