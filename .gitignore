@@ -48,8 +48,7 @@ debug/
 *.swp
 *.local
 temp/
-.temp/
-tmp/
+.temp/tmp/
 
 .git/
 
@@ -89,3 +88,21 @@ pytest_cache/
 .pytest_cache/
 .mypy_cache/
 .dmypy.json
+
+# Visual Studio Solution
+environment.sln
+
+# Go
+go.work
+go.sum
+
+# Node.js
+pnpm-lock.yaml
+
+# Python
+*.pyc
+*.pyd
+*.so
+environment_python.egg-info/
+
+/testing/

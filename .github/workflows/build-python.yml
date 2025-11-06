@@ -1,0 +1,36 @@
+name: Build Python
+
+on:
+  push:
+    branches:
+      - canary
+      - stable
+  pull_request:
+    branches:
+      - canary
+      - stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.14, 3.12]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: pip install pytest
+
+      - name: Install local package
+        run: pip install -e .
+        working-directory: packages/python
+
+      - name: Test with pytest
+        run: pytest
+        working-directory: packages/python

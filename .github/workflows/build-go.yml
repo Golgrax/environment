@@ -1,0 +1,29 @@
+name: Build Go
+
+on:
+  push:
+    branches:
+      - canary
+      - stable
+  pull_request:
+    branches:
+      - canary
+      - stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.25, 1.22]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run tests
+        run: go test -v ./...
+        working-directory: packages/go/environment

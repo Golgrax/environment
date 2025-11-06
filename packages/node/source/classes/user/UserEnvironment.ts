@@ -14,29 +14,51 @@ import { Platform } from "@/types/global";
 import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
 
 /**
- * A class that provides methods for managing user environment variables.
- * Supports both Windows (HKCU) and Unix-based systems. (~/)
+ * A class that provides methods for managing **user-level environment variables**.
+ * It abstracts the differences between Windows (HKCU Registry) and Unix-like systems (shell configuration files like `.bashrc`, `.zshrc`).
  *
- * @template S - The abstract environment schema.
+ * @example
+ * ```typescript
+ * const userEnv = new UserEnvironment(process.platform);
+ *
+ * // Set a user-specific variable
+ * userEnv.set("MY_APP_THEME", "dark");
+ *
+ * // Get the variable
+ * const theme = userEnv.get("MY_APP_THEME");
+ * console.log(`User theme is: ${theme}`);
+ *
+ * // List all user-specific variables
+ * const allUserVars = userEnv.listKeys();
+ * console.log(allUserVars);
+ * ```
+ *
+ * @template S - An abstract schema representing the structure of the environment variables.
  * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/user-environment.md)
  */
 class UserEnvironment<
   S extends Record<string, string> = Record<string, string>,
 > {
-  /** The platform to base operations on. */
+  /** The operating system platform to base operations on. */
   public platform: Platform;
 
+  /**
+   * Creates an instance of the UserEnvironment class.
+   * @param platform The operating system platform.
+   */
   constructor(platform: Platform) {
     this.platform = platform;
   }
 
   //#region Core Operations
   /**
-   * Retrieves the value of an environment variable.
+   * Retrieves the value of a user environment variable.
    *
    * @param name - The name of the environment variable to retrieve.
-   * @param options - Optional options for the operation.
-   * @returns The value of the environment variable or the default value if not found.
+   * @param options - Optional settings for the operation.
+   * @param options.defaultValue - A fallback value to return if the variable is not found.
+   * @param options.type - (Windows only) The registry value type to query.
+   * @returns The value of the environment variable, or the default value if not found.
    */
   public get<K extends keyof S>(
     name: K,
@@ -45,12 +67,13 @@ class UserEnvironment<
       type?: WindowsRegistryType;
     },
   ): S[K] | undefined {
+    const varName = String(name);
     switch (this.platform) {
       // Windows
       case Platform.Windows: {
         const response = spawnSync(
           "reg",
-          ["query", WindowsRegistry.HKCU, "/v", name as string],
+          ["query", WindowsRegistry.HKCU, "/v", varName],
           {
             stdio: ["pipe", "pipe", "pipe"],
             encoding: "utf-8",
@@ -61,7 +84,7 @@ class UserEnvironment<
 
         const line = response.stdout
           .split("\n")
-          .find((l) => l.includes(name as string));
+          .find((l) => l.includes(varName));
 
         if (!line) return options?.defaultValue;
 
@@ -77,7 +100,7 @@ class UserEnvironment<
 
         const content = readFileSync(rcFilePath, "utf-8");
         const regex = new RegExp(
-          `(?:export|set|setenv)\\s+${name as string}(?:=|\\s+)["']?(.+?)["']?$`,
+          `(?:export|set|setenv)\\s+${varName}(?:=|\\s+)["']?(.+?)["']?$`,
         );
         const match = content.match(regex);
 
@@ -90,11 +113,13 @@ class UserEnvironment<
   }
 
   /**
-   * Sets the value of an environment variable.
+   * Sets the value of a user environment variable.
+   * On Windows, this modifies the HKCU registry. On Unix, it appends an export command to the appropriate shell config file (e.g., `.bashrc`, `.zshrc`).
    *
    * @param name - The name of the environment variable to set.
-   * @param value - The value to set for the environment variable.
-   * @param options - Optional options for the operation.
+   * @param value - The value to assign to the variable.
+   * @param options - Optional settings for the operation.
+   * @param options.type - (Windows only) The registry value type to create.
    */
   public set<K extends keyof S>(
     name: K,
@@ -103,6 +128,9 @@ class UserEnvironment<
       type?: WindowsRegistryType;
     },
   ): void {
+    const varName = String(name);
+    const varValue = String(value);
+
     switch (this.platform) {
       // Windows
       case Platform.Windows: {
@@ -110,11 +138,11 @@ class UserEnvironment<
           "add",
           WindowsRegistry.HKCU,
           "/v",
-          `${name as string}`,
+          varName,
           "/t",
           `${options?.type || WindowsRegistryType.REG_EXPAND_SZ}`,
           "/d",
-          `${value as string}`,
+          varValue,
           "/f",
         ];
 
@@ -148,7 +176,6 @@ class UserEnvironment<
         const filteredContent = content
           .split("\n")
           .filter((line) => {
-            const varName = name as string;
             return !line.match(
               new RegExp(`(?:^|\\s)(export|set|setenv)\\s+${varName}(=|\\s)`),
             );
@@ -174,16 +201,17 @@ class UserEnvironment<
   }
 
   /**
-   * Removes an environment variable from the user's environment.
+   * Removes a user environment variable.
    *
    * @param name The name of the environment variable to remove.
    */
   public remove<K extends keyof S>(name: K): void {
+    const varName = String(name);
     switch (this.platform) {
       case Platform.Windows: {
         const response = spawnSync(
           "reg",
-          ["delete", WindowsRegistry.HKCU, "/v", name as string, "/f"],
+          ["delete", WindowsRegistry.HKCU, "/v", varName, "/f"],
           {
             stdio: ["ignore", "pipe", "pipe"],
             encoding: "utf-8",
@@ -206,7 +234,6 @@ class UserEnvironment<
         const filteredContent = content
           .split("\n")
           .filter((line) => {
-            const varName = name as string;
             return !line.match(
               new RegExp(`(?:^|\\s)(export|set|setenv)\\s+${varName}(=|\\s)`),
             );
@@ -230,9 +257,9 @@ class UserEnvironment<
   }
 
   /**
-   * Lists all environment variable keys.
+   * Lists all user-level environment variable keys.
    *
-   * @returns An array of environment variable keys.
+   * @returns An array of keys for the user environment variables.
    */
   public listKeys(): (keyof S)[] {
     switch (this.platform) {
@@ -279,9 +306,9 @@ class UserEnvironment<
   }
 
   /**
-   * Lists all environment variable values.
+   * Lists all user-level environment variable values.
    *
-   * @returns An array of environment variable values.
+   * @returns An array of values for the user environment variables.
    */
   public listValues(): S[keyof S][] {
     const keys = this.listKeys();
@@ -337,10 +364,13 @@ class UserEnvironment<
 
   //#region File Operations
   /**
-   * Saves the current environment variables to a file.
+   * Exports all user environment variables to a file.
    *
-   * @param path The path to the file to save to.
-   * @returns A promise that resolves when the file has been saved.
+   * This can be useful for creating backups or sharing configurations.
+   * The output file will be in JSON format.
+   *
+   * @param path The absolute or relative path to save the file to.
+   * If not provided, it defaults to `./user-environment-[platform].json`.
    */
   public async saveToFile(path?: string): Promise<void> {
     const fs = await import("fs/promises");
@@ -393,9 +423,11 @@ class UserEnvironment<
 
   //#region Internal Methods
   /**
-   * Infers the RC file path based on the user's shell.
+   * Infers the user's shell configuration file path (e.g., `~/.bashrc`, `~/.zshrc`).
+   * Creates the file if it does not exist.
    *
-   * @internal This method is used internally by this class, it is not intended for external use.
+   * @internal This method is used internally and is not intended for external use.
+   * @returns The absolute path to the RC file, or an empty string if it cannot be determined or created.
    */
   private getRCFilePath(): string {
     const homeDir = homedir();
@@ -434,9 +466,11 @@ class UserEnvironment<
   }
 
   /**
-   * Checks whether the file exists and is writable.
+   * Checks whether the current process has write permissions for a file.
    *
-   * @internal This method is used internally by this class, it is not intended for external use.
+   * @internal This method is used internally and is not intended for external use.
+   * @param path The path to the file to check.
+   * @returns `true` if the file is writable, `false` otherwise.
    */
   private canWriteFile(path: string): boolean {
     try {
@@ -448,9 +482,12 @@ class UserEnvironment<
   }
 
   /**
-   * Infers the export line for the given directory
+   * Generates the correct shell command to export a variable based on the user's current shell.
    *
-   * @internal This method is used internally by this class, it is not intended for external use.
+   * @internal This method is used internally and is not intended for external use.
+   * @param variable The name of the variable to export.
+   * @param value The value of the variable.
+   * @returns A string containing the shell command (e.g., `export VAR="value"`).
    */
   private getExportLine<K extends keyof S>(variable: K, value: S[K]): string {
     let shell: string = basename(process.env.SHELL || "/bin/sh");

@@ -14,17 +14,16 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./source/*"]
     }
   },
-  "include": ["source/**/*.ts", "tsup.config.ts"],
+  "include": ["source/**/*.ts", "tsup.config.ts", "__tests__/**/*.ts"],
   "exclude": [
     "node_modules",
     "build",
-    "**/__tests__/*",
     "mocks",
     "examples/**/*.ts"
   ]

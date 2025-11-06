@@ -8,9 +8,15 @@ license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
 
+[tool.setuptools.packages]
+find = {where = ["."], include = ["environment*"]}
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.uv.workspace]
 members = ["python"]
+
+[tool.pytest.ini_options]
+pythonpath = ["./environment"]
