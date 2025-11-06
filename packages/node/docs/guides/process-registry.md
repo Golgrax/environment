@@ -5,7 +5,7 @@ It allows you to store, retrieve, and manipulate records of running `ChildProces
 
 This class is particularly useful when managing multiple background processes, enabling consistent bookkeeping for monitoring, cleanup, or orchestration logic.
 
-**Source:** [`source/classes/process/ProcessRegistry.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessRegistry.ts)
+**Source:** [`source/classes/process/ProcessRegistry.ts`](https://github.com/octovel/environment/blob/stable/source/classes/process/ProcessRegistry.ts)
 
 ---
 

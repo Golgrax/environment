@@ -10,7 +10,7 @@ It supports:
 
 This class can be used to manage custom runtime variables, modify system paths, or synchronize environment configurations across systems.
 
-**Source:** [`source/classes/user/UserEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/user/UserEnvironment.ts)
+**Source:** [`source/classes/user/UserEnvironment.ts`](https://github.com/octovel/environment/blob/stable/source/classes/user/UserEnvironment.ts)
 
 ---
 
@@ -26,7 +26,7 @@ Creates a new `UserEnvironment` instance, initialized for a specific operating s
 
 | Name       | Type                                | Description                                            |
 | ---------- | ----------------------------------- | ------------------------------------------------------ |
-| `platform` | [`Platform`](https://github.com/octovel/environment-node/blob/stable/source/types/global.ts) | The current platform. Should match `process.platform`. |
+| `platform` | [`Platform`](https://github.com/octovel/environment/blob/stable/source/types/global.ts) | The current platform. Should match `process.platform`. |
 
 ### Example
 

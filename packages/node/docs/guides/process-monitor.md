@@ -9,7 +9,7 @@ It focuses on **lightweight process monitoring**, allowing you to:
 
 This class is best used in combination with `ProcessRegistry` and `ProcessController` to provide a full process management suite.
 
-**Source:** [`source/classes/process/ProcessMonitor.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessMonitor.ts)
+**Source:** [`source/classes/process/ProcessMonitor.ts`](https://github.com/octovel/environment/blob/stable/source/classes/process/ProcessMonitor.ts)
 
 ---
 

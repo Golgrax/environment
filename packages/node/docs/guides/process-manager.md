@@ -11,7 +11,7 @@ The `ProcessManager` class provides a **comprehensive API for managing environme
 
 It is designed to **abstract environment manipulation**, providing safe, extensible, and observable operations, especially useful in CLI tools, build orchestrators, and process management frameworks.
 
-**Source:** [`source/classes/process/ProcessManager.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessManager.ts)
+**Source:** [`source/classes/process/ProcessManager.ts`](https://github.com/octovel/environment/blob/stable/source/classes/process/ProcessManager.ts)
 
 ---
 

@@ -5,7 +5,7 @@ It supports starting, stopping, restarting, and inspecting system processes. All
 
 Unlike lower-level wrappers around `spawn()`, this class enforces clean error handling, strong typing, and consistent process management patterns across different environments.
 
-**Source:** [`source/classes/process/ProcessController.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/process/ProcessController.ts)
+**Source:** [`source/classes/process/ProcessController.ts`](https://github.com/octovel/environment/blob/stable/source/classes/process/ProcessController.ts)
 
 ---
 

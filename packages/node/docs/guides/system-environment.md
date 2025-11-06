@@ -10,7 +10,7 @@ It allows administrative-level access to environment configurations, supporting:
 
 This class is designed for **administrative scripts, setup tools, and system configuration utilities** that need to alter global environment settings accessible by all users.
 
-**Source:** [`source/classes/system/SystemEnvironment.ts`](https://github.com/octovel/environment-node/blob/stable/source/classes/system/SystemEnvironment.ts)
+**Source:** [`source/classes/system/SystemEnvironment.ts`](https://github.com/octovel/environment/blob/stable/source/classes/system/SystemEnvironment.ts)
 
 ---
 
@@ -26,7 +26,7 @@ Creates a new `SystemEnvironment` instance for the specified platform.
 
 | Name       | Type                                | Description                                           |
 | ---------- | ----------------------------------- | ----------------------------------------------------- |
-| `platform` | [`Platform`](https://github.com/octovel/environment-node/blob/stable/source/types/global.ts) | Platform identifier (`Windows`, `MacOS`, or `Linux`). |
+| `platform` | [`Platform`](https://github.com/octovel/environment/blob/stable/source/types/global.ts) | Platform identifier (`Windows`, `MacOS`, or `Linux`). |
 
 ### Example
 

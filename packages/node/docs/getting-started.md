@@ -86,4 +86,4 @@ Once a process terminates, its PID becomes invalid. The registry keeps only meta
 ### Where can I report issues or request features?
 
 You can report issues or request new features directly on GitHub:
-[octovel/environment-node Issues](https://github.com/octovel/environment-node/issues)
+[octovel/environment Issues](https://github.com/octovel/environment/issues)
