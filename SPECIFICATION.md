@@ -9,8 +9,9 @@ Provides access to system-level information and environment variables.
 ### `SystemEnvironment(platform: Platform)`
 
 -   **Description:** Creates a new instance of the SystemEnvironment class.
+    -   **Note:** The Node.js implementation takes a `platform` parameter. The Go and Python implementations auto-detect the platform and their constructors take no arguments. (Google Translated, please correct if theres a grammar error.)
 -   **Parameters:**
-    -   `platform` (`Platform`): The platform to base operations on.
+    -   `platform` (`Platform`): The platform to base operations on (for Node.js).
 -   **Returns:** `SystemEnvironment`
 
 ### `get<K extends keyof S>(name: K, options?: { defaultValue?: S[K]; type?: WindowsRegistryType })`
@@ -19,7 +20,7 @@ Provides access to system-level information and environment variables.
 -   **Parameters:**
     -   `name` (`K`): The name of the environment variable to retrieve.
     -   `options` (`object`, optional): Optional options for the operation.
-        -   `defaultValue` (`S[K]`, optional): The default value to return if the variable is not found.
+        -   `defaultValue` (`S[K]`, optional): The default value to return if the variable is not found. (Note: Currently only supported in the Node.js implementation).
         -   `type` (`WindowsRegistryType`, optional): The type of the Windows Registry key (only applicable for Windows).
 -   **Returns:** `S[K] | undefined`
 
@@ -58,15 +59,15 @@ Provides access to system-level information and environment variables.
 -   **Parameters:** None
 -   **Returns:** `string`
 
-### `getCPU()`
+### `getCPUInfo()`
 
--   **Description:** Returns the CPU information.
+-   **Description:** Returns the CPU information. Implemented as `GetCPUModel()` in Go, `get_cpu_info()` in Python, and `getCPU()` in Node.js.
 -   **Parameters:** None
 -   **Returns:** `object`
 
-### `getMemory()`
+### `getMemoryInfo()`
 
--   **Description:** Returns the memory information.
+-   **Description:** Returns the memory information. Implemented as `GetTotalMemory()` in Go, `get_memory_info()` in Python, and `getMemory()` in Node.js.
 -   **Parameters:** None
 -   **Returns:** `object`
 
@@ -84,7 +85,7 @@ Provides access to user-level environment variables.
 -   **Description:** Retrieves the value of a user environment variable.
 -   **Parameters:**
     -   `name` (`string`): The name of the environment variable to retrieve.
-    -   `defaultValue` (`string`, optional): The default value to return if the variable is not found.
+    -   `defaultValue` (`string`, optional): The default value to return if the variable is not found. (Note: Currently only supported in the Node.js implementation).
 -   **Returns:** `string | undefined`
 
 ### `set(name: string, value: string)`
@@ -129,10 +130,4 @@ Provides access to process-level information.
 -   **Description:** Returns the command-line arguments.
 -   **Parameters:** None
 -   **Returns:** `string[]`
-
-### `getMemoryUsage()`
-
--   **Description:** Returns the memory usage of the process.
--   **Parameters:** None
--   **Returns:** `object`
 
