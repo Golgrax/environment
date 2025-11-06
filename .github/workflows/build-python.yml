@@ -1,14 +1,13 @@
-name: Build Python
+name: Build Python Implementation
 
 on:
   push:
     branches:
       - canary
       - stable
-  pull_request:
-    branches:
-      - canary
-      - stable
+    paths:
+      - "packages/python/**"
+      - ".github/workflows/build-python.yml"
 
 jobs:
   build:
