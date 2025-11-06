@@ -1,14 +1,13 @@
-name: Build Go
+name: Build Go Implementation
 
 on:
   push:
     branches:
       - canary
       - stable
-  pull_request:
-    branches:
-      - canary
-      - stable
+    paths:
+      - "packages/go/**"
+      - ".github/workflows/build-go.yml"
 
 jobs:
   build:
