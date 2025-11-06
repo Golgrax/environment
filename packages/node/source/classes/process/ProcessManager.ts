@@ -42,7 +42,7 @@ interface TemporaryValue<K extends PropertyKey, V> {
  *
  * @template S - The environment schema type.
  * @template K - The key within the environment schema.
- * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-manager.md)
+ * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/docs/guides/process-manager.md)
  */
 class ProcessManager<S extends IEnvironmentSchema> {
   /** Stores hook callbacks registered for various environment lifecycle events. */

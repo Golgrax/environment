@@ -34,7 +34,7 @@ import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
  * ```
  *
  * @template S - An abstract schema representing the structure of the environment variables.
- * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/user-environment.md)
+ * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/docs/guides/user-environment.md)
  */
 class UserEnvironment<
   S extends Record<string, string> = Record<string, string>,

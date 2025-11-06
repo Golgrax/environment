@@ -11,24 +11,8 @@ import { WindowsRegistry, WindowsRegistryType } from "@/types/registry";
  *
  * Requires elevated (admin/root) permissions for write operations.
  *
- * @example
- * ```typescript
- * const systemEnv = new SystemEnvironment(process.platform);
- *
- * // Get a system variable
- * const path = systemEnv.get("PATH");
- * console.log(`System PATH is: ${path}`);
- *
- * // Set a new system variable (requires admin privileges)
- * // systemEnv.set("MY_SYSTEM_VAR", "hello world");
- *
- * // Get OS and hardware info
- * console.log(`OS: ${systemEnv.getOS()}`);
- * console.log(`CPU: ${JSON.stringify(systemEnv.getCPU())}`);
- * ```
- *
  * @template S - The abstract environment schema.
- * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/system-environment.md)
+ * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/docs/guides/system-environment.md)
  */
 class SystemEnvironment<
   S extends Record<string, string> = Record<string, string>,
@@ -179,7 +163,10 @@ class SystemEnvironment<
         const regex = new RegExp(`^${varName}=.*$`, "m");
 
         if (regex.test(content)) {
-          content = content.replace(regex, `${varName}="${varValue.replace(/"/g, '\\"')}"`);
+          content = content.replace(
+            regex,
+            `${varName}="${varValue.replace(/"/g, '\\"')}"`,
+          );
         } else {
           content += `\n${varName}="${varValue.replace(/"/g, '\\"')}"`;
         }

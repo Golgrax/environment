@@ -6,7 +6,7 @@ import type { IProcessInfo } from "@/types/process";
  * A class that provides methods for managing records of active processes.
  *
  * @template P - The specific type of child process being managed.
- * @documentation [view on GitHub](https://github.com/octovel/environment-node/blob/stable/docs/guides/process-registry.md)
+ * @documentation [view on GitHub](https://github.com/octovel/environment/blob/stable/docs/guides/process-registry.md)
  */
 export class ProcessRegistry<P extends ChildProcess = ChildProcess> {
   /**
