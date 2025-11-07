@@ -58,26 +58,22 @@ temp/
 archives/
 storage/
 
+## Python related ignores
 # Python build artifacts
 __pycache__/
 *.py[cod]
 *.pyo
-*.pyd
-
-# Packaging metadata
-*.egg-info/
+# Python Packaging metadata
+*egg-info*
 packages/python/dist/
 packages/python/build/
-
 # Virtual environments
 .venv/
 venv/
 packages/python/env/
-
 # UV build cache
 .uv/
 .uv_cache/
-
 # Logs, coverage, testing
 *.log
 coverage/

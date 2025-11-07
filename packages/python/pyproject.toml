@@ -1,5 +1,5 @@
 [project]
-name = "environment-pyython"
+name = "environment_python"
 version = "0.1.0"
 description = "Python abstraction for environment management and metrics"
 authors = [{ name = "Bekian" }]
@@ -20,3 +20,6 @@ members = ["python"]
 
 [tool.pytest.ini_options]
 pythonpath = ["./environment"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
