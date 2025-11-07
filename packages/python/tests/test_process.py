@@ -1,10 +1,10 @@
 import unittest
 import os
 import sys
-from environment.process import Process
+from src.process import Process
+
 
 class TestProcess(unittest.TestCase):
-
     def setUp(self):
         self.p = Process()
 
@@ -15,5 +15,5 @@ class TestProcess(unittest.TestCase):
         self.assertEqual(self.p.get_command_line_arguments(), sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

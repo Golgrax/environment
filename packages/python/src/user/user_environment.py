@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+
 class UserEnvironment:
     """Provides methods for managing user-level environment variables.
 
@@ -28,7 +29,7 @@ class UserEnvironment:
         # Add more shell detections as needed
         return os.path.join(home_dir, ".profile")
 
-    def get(self, name: str) -> str or None:
+    def get(self, name: str) -> str | None:
         """Retrieves the value of a user environment variable.
 
         This method reads the user's shell configuration file to find the specified
@@ -48,7 +49,7 @@ class UserEnvironment:
             for line in f:
                 if line.strip().startswith(f"export {name}="):
                     # Extract the value, removing quotes
-                    return line.split("=", 1)[1].strip().strip('"\'')
+                    return line.split("=", 1)[1].strip().strip("\"'")
         return None
 
     def set(self, name: str, value: str):
@@ -69,13 +70,13 @@ class UserEnvironment:
             with open(rc_file_path, "r") as f:
                 for line in f:
                     if line.strip().startswith(f"export {name}="):
-                        lines.append(f"export {name}=\"{value}\"\n")
+                        lines.append(f'export {name}="{value}"\n')
                         found = True
                     else:
                         lines.append(line)
-        
+
         if not found:
-            lines.append(f"export {name}=\"{value}\"\n")
+            lines.append(f'export {name}="{value}"\n')
 
         with open(rc_file_path, "w") as f:
             f.writelines(lines)
@@ -98,7 +99,7 @@ class UserEnvironment:
             for line in f:
                 if not line.strip().startswith(f"export {name}="):
                     lines.append(line)
-        
+
         with open(rc_file_path, "w") as f:
             f.writelines(lines)
 
@@ -143,5 +144,5 @@ class UserEnvironment:
                 if line.strip().startswith("export "):
                     parts = line.split("=", 1)
                     if len(parts) > 1:
-                        values.append(parts[1].strip().strip('\"\''))
+                        values.append(parts[1].strip().strip("\"'"))
         return values
