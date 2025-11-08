@@ -1,8 +1,15 @@
+# Version 0.0.24
+
+## Additions
+
+- Bumped to v0.0.24.
+- Refactored some of the docstrings.
+
 # Version 0.0.23
 
 ## Additions
 
-- Bumped to v0.0.23
+- Bumped to v0.0.23.
 - Made the package more secure, lighter and slightly faster.
 - Refactored the `ProcessController` class.
   - Made it fully support Windows and UNIX systems.
