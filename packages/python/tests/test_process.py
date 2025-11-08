@@ -1,7 +1,8 @@
-import unittest
 import os
 import sys
-from src.process import Process
+import unittest
+
+from src.process.process import Process
 
 
 class TestProcess(unittest.TestCase):

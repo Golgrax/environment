@@ -1,5 +1,7 @@
 import unittest
-from environment.system_environment import SystemEnvironment
+
+from src.system.system_environment import SystemEnvironment
+
 
 class TestSystemEnvironment(unittest.TestCase):
     def setUp(self):
@@ -16,11 +18,8 @@ class TestSystemEnvironment(unittest.TestCase):
         mem_info = self.se.get_memory_info()
         self.assertIn("total", mem_info)
 
-
-
-
-
     # The 'set' and 'remove' methods are not tested as they require sudo permissions.
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

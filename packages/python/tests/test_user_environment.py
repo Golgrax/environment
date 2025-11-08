@@ -1,10 +1,11 @@
-import unittest
 import os
 import tempfile
-from environment.user_environment import UserEnvironment
+import unittest
+
+from src.user.user_environment import UserEnvironment
+
 
 class TestUserEnvironment(unittest.TestCase):
-
     def setUp(self):
         self.ue = UserEnvironment()
         self.test_dir = tempfile.TemporaryDirectory()
@@ -29,5 +30,6 @@ class TestUserEnvironment(unittest.TestCase):
         self.assertIsNone(self.ue.get("TEST_VAR"))
         self.assertEqual(self.ue.list_keys(), ["ANOTHER_VAR"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

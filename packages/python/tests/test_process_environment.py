@@ -1,10 +1,11 @@
-import unittest
-import os
 import getpass
-from environment.process_environment import ProcessEnvironment
+import os
+import unittest
+
+from src.process.process_environment import ProcessEnvironment
+
 
 class TestProcessEnvironment(unittest.TestCase):
-
     def setUp(self):
         self.pe = ProcessEnvironment()
 
@@ -14,5 +15,6 @@ class TestProcessEnvironment(unittest.TestCase):
     def test_get_home_directory(self):
         self.assertEqual(self.pe.get_home_directory(), os.path.expanduser("~"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
