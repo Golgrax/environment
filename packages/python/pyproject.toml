@@ -5,7 +5,7 @@ description = "Python abstraction for environment management and metrics"
 authors = [{ name = "Bekian" }]
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 dependencies = []
 
 [tool.setuptools.packages]
@@ -23,3 +23,7 @@ pythonpath = ["./environment"]
 
 [tool.setuptools]
 package-dir = { "" = "src" }
+
+[tool.basedpyright]
+pythonVersion="3.14"
+typeCheckingMode="standard"

@@ -1,12 +1,24 @@
+# Version 0.0.6
+
+### Changes
+
+- Refactored `user/user_environment.py` to utilize the os.environ mapping object for greatly simplified methods and better performance.
+- Removed `tests/test_process.py`, see previous version.
+- Updated project Python version to 3.14
+
+### Minor Changes
+
+- Removed unused subprocess reference from `user/user_environment.py`
+
 # Version 0.0.5
 
 ### Changes
 
-- removed `process/process.py`, it has no mirrors across other implementations, and its inclusion is unnecessary and provides no novel functionality, nor does it make any lower level interface simpler to use.
+- Removed `process/process.py`, it has no mirrors across other implementations, and its inclusion is unnecessary and provides no novel functionality, nor does it make any lower level interface simpler to use.
 
 ### Minor Changes
 
-- added basic styling to python test files
+- Added basic styling to python test files
 
 # Version 0.0.4
 
