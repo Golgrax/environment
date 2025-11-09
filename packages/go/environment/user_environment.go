@@ -20,7 +20,7 @@ type UserEnvironment struct{}
 // Get retrieves a user-level environment variable by parsing the .bashrc file.
 // It searches for lines starting with "export NAME=" and extracts the value.
 // Returns an empty string if the variable is not found or an error occurs.
-func (ue *UserEnvironment) Get(name string) (string, error) {
+func (ue *UserEnvironment) Get(name string, defaultValue ...string) (string, error) {
 	// Get the current user's home directory.
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -31,6 +31,9 @@ func (ue *UserEnvironment) Get(name string) (string, error) {
 	bashrcPath := home + "/.bashrc"
 	file, err := os.Open(bashrcPath)
 	if err != nil {
+		if len(defaultValue) > 0 {
+			return defaultValue[0], nil
+		}
 		return "", fmt.Errorf("failed to open .bashrc file %s: %w", bashrcPath, err)
 	}
 	defer file.Close()
@@ -50,6 +53,10 @@ func (ue *UserEnvironment) Get(name string) (string, error) {
 
 	if err := scanner.Err(); err != nil {
 		return "", fmt.Errorf("error scanning .bashrc file %s: %w", bashrcPath, err)
+	}
+
+	if len(defaultValue) > 0 {
+		return defaultValue[0], nil
 	}
 
 	return "", nil // Return empty string if not found
