@@ -1,4 +1,5 @@
 mod tests {
+    #[allow(unused_imports)]
     use octovel_environment::process::ProcessController;
     
     #[cfg(unix)]
