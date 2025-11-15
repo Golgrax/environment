@@ -1,4 +1,5 @@
 pub struct ProcessController {
+    #[allow(dead_code)]
     process_id: i32
 }
 
