@@ -8,14 +8,6 @@ class SystemEnvironment:
     /proc filesystem entries to avoid external dependencies.
     """
 
-    def get_os(self) -> str:
-        """Retrieves the operating system name.
-
-        Returns:
-            str: The name of the operating system (e.g., 'Linux', 'Windows').
-        """
-        return platform.system()
-
     def get_cpu_info(self) -> dict:
         """Retrieves CPU information.
 
@@ -25,7 +17,7 @@ class SystemEnvironment:
         Returns:
             dict: A dictionary containing CPU information, typically with a 'model' key.
         """
-        if self.get_os() == "Linux":
+        if platform.system() == "Linux":
             try:
                 with open("/proc/cpuinfo", "r") as f:
                     for line in f:
@@ -45,7 +37,7 @@ class SystemEnvironment:
             dict: A dictionary containing memory information, typically with a 'total' key
                   representing total memory in bytes.
         """
-        if self.get_os() == "Linux":
+        if platform.system() == "Linux":
             try:
                 with open("/proc/meminfo", "r") as f:
                     for line in f:

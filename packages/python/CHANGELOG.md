@@ -1,3 +1,18 @@
+# Version 0.0.7
+
+### Changes
+
+- Renamed `user/user_environment.py` to `process/process_environment.py`, the behavior used here only relates to process environments, not user-level environment variables. user_environment will be implemented later.
+- Added the functionality in ProcessEnvironment.get() to optionally return a default value if provided.
+- Added the functionality in ProcessEnvironment.remove() to return a bool based on successful removal.
+- Refactored `system/system_environment.py` to use platform.system() directly instead of a bespoke function, instead of wrapping the same function. There are plans to create a factory to manage context switching for different platforms, this will handle that behavior automatically.
+
+### Minor Changes
+
+- Updated "user" related comments and names in `process/process_environment.py` to be "process" oriented.
+- Removed references to user_environment in `__init__.py`
+- Revised a few comments for better wording.
+
 # Version 0.0.6
 
 ### Changes
