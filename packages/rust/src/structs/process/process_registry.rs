@@ -1,5 +1,10 @@
 #[cfg(unix)]
 use crate::types::ProcessInfo;
+#[cfg(unix)]
+use std::{
+    fs::read_to_string,
+    path::Path
+};
 
 /// A struct for managing a process.
 pub struct ProcessRegistry {
@@ -28,8 +33,6 @@ impl ProcessRegistry {
     #[allow(clippy::too_many_lines)]
     #[cfg(unix)]
     pub fn get_info(&self) -> Result<ProcessInfo, String> {
-        use std::{fs::read_to_string, path::Path};
-
         let path = Path::new("/proc").join(self.pid.to_string()).join("status");
         if !path.exists() {
             return Err(format!("Process with the ID of {} does not exist.", self.pid));

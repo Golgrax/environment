@@ -1,5 +1,26 @@
+#[cfg(unix)]
+use std::{ 
+    ffi::CString,
+    ptr::null,
+    fs::File,
+    os::fd::FromRawFd,
+    io::Read
+};
+
+#[cfg(unix)]
+unsafe extern "C" {
+    fn fork() -> i32;
+    fn execvp(path: *const i8, arg: *const *const i8) -> i32;
+    fn pipe(fildes: *mut i32) -> i32;
+    fn dup2(oldfd: i32, newfd: i32) -> i32;
+    fn kill(pid: i32, sig: i32) -> i32;
+    fn waitpid(pid: i32, status: *mut i32, options: i32) -> i32;
+    fn dup(fildes: i32) -> i32;
+    fn close(fildes: i32) -> i32;
+}
+
 pub struct ProcessController {
-    #[allow(dead_code)]
+    #[cfg(unix)]
     process_id: i32
 }
 
@@ -11,6 +32,7 @@ impl ProcessController {
     #[must_use]
     pub const fn new() -> Self {
         Self {
+            #[cfg(unix)]
             process_id: -1
         }
     }
@@ -27,13 +49,6 @@ impl ProcessController {
     /// # Errors
     #[cfg(unix)]
     pub fn start(&mut self, command: &str, args: &Vec<&str>) -> Result<(i32, i32), String> {
-        unsafe extern "C" {
-            fn fork() -> i32;
-            fn execvp(path: *const i8, arg: *const *const i8) -> i32;
-            fn pipe(fildes: *mut i32) -> i32;
-            fn dup2(oldfd: i32, newfd: i32) -> i32;
-        }
-        
         if self.process_id != -1 {
             return Err("There is already a running process!".to_string());
         }
@@ -60,11 +75,6 @@ impl ProcessController {
 
         if pid == 0 {
             unsafe {
-                use std::{
-                    ffi::CString, ptr::null
-                };
-                
-
                 match self.close(pipe_stdout[0]) {
                     Ok(()) => {},
                     Err(err) => return Err(err)
@@ -132,10 +142,6 @@ impl ProcessController {
     /// # Errors
     #[cfg(unix)]
     pub fn stop(&mut self, sig: i32) -> Result<(), String> {
-        unsafe extern "C" {
-            fn kill(pid: i32, sig: i32) -> i32;
-        }
-
         if self.process_id == -1 {
             return Err("No running process to stop!".to_string());
         }
@@ -193,10 +199,6 @@ impl ProcessController {
     #[cfg(unix)]
     #[must_use]
     pub fn wait(&self, flags: i32) -> (i32, i32) {
-        unsafe extern "C" {
-            fn waitpid(pid: i32, status: *mut i32, options: i32) -> i32;
-        }
-
         let mut stat: i32 = 0;
         unsafe {
             let wait_res = waitpid(self.process_id, &raw mut stat, flags);
@@ -214,10 +216,6 @@ impl ProcessController {
     /// # Errors
     #[cfg(unix)]
     pub fn close(&self, fildes: i32) -> Result<(), String> {
-        unsafe extern "C" {
-            fn close(fildes: i32) -> i32;
-        }
-
         unsafe {
             if close(fildes) != 0 {
                 return Err("Failed to close fildes".to_string());
@@ -229,10 +227,6 @@ impl ProcessController {
     #[cfg(unix)]
     #[must_use]
     pub fn duplicate(&self, fildes: i32) -> i32 {
-        unsafe extern "C" {
-            fn dup(fildes: i32) -> i32;
-        }
-        
         unsafe {
             dup(fildes)
         }
@@ -248,12 +242,6 @@ impl ProcessController {
     /// # Errors
     #[cfg(unix)]
     pub fn read(&self, fildes: i32) -> Result<String, String> {
-        use std::{
-            fs::File,
-            os::fd::FromRawFd,
-            io::Read
-        };
-
         let mut out = Vec::new();
 
         unsafe {
