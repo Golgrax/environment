@@ -1,8 +1,12 @@
+#[cfg(unix)]
+use crate::types::ProcessState;
+
 #[derive(Debug)]
+#[cfg(unix)]
 pub struct ProcessInfo {
     pub name: String,
     pub umask: i32,
-    pub state: String,
+    pub state: ProcessState,
     pub tgid: i32,
     pub ngid: i32,
     pub pid: i32,
@@ -38,16 +42,16 @@ pub struct ProcessInfo {
     pub untag_mask: String,
     pub threads: i32,
     pub sig_q: Vec<i32>,
-    pub sig_pnd: i64,
-    pub shd_pnd: i64,
-    pub sig_blk: i64,
-    pub sig_ign: i64,
-    pub sig_cgt: i64,
-    pub cap_inh: i64,
-    pub cap_prm: i64,
-    pub cap_eff: i64,
+    pub sig_pnd: String,
+    pub shd_pnd: String,
+    pub sig_blk: String,
+    pub sig_ign: String,
+    pub sig_cgt: String,
+    pub cap_inh: String,
+    pub cap_prm: String,
+    pub cap_eff: String,
     pub cap_bnd: String,
-    pub cap_amb: i64,
+    pub cap_amb: String,
     pub no_new_privs: i32,
     pub sec_comp: i32,
     pub sec_comp_filters: i32,

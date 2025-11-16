@@ -1,16 +1,16 @@
 #[cfg(unix)]
-use crate::types::ProcessInfo;
+use crate::types::{
+    ProcessInfo,
+    ProcessState
+};
 #[cfg(unix)]
 use std::{
     fs::read_to_string,
     path::Path
 };
 
-/// A struct for managing a process.
-pub struct ProcessRegistry {
-    #[allow(dead_code)]
-    pid: i32
-}
+/// A struct for managing processes.
+pub struct ProcessRegistry;
 
 impl ProcessRegistry {
     /// Constructs a new `octovel_environment::process::ProcessRegistry` (`Self`).
@@ -18,10 +18,8 @@ impl ProcessRegistry {
     /// # Returns
     /// `octovel_environment::process::ProcessRegistry` (`Self`).
     #[must_use]
-    pub const fn new(pid: i32) -> Self {
-        Self {
-            pid
-        }
+    pub const fn new() -> Self {
+        Self {}
     }
 
     /// Returns info about the process.
@@ -32,18 +30,16 @@ impl ProcessRegistry {
     /// # Panics
     #[allow(clippy::too_many_lines)]
     #[cfg(unix)]
-    pub fn get_info(&self) -> Result<ProcessInfo, String> {
-        let path = Path::new("/proc").join(self.pid.to_string()).join("status");
+    pub fn get_info(&self, pid: i32) -> Result<ProcessInfo, String> {
+        let path = Path::new("/proc").join(pid.to_string()).join("status");
         if !path.exists() {
-            return Err(format!("Process with the ID of {} does not exist.", self.pid));
+            return Err(format!("Process with the ID of {pid} does not exist."));
         }
         
         #[allow(unused_assignments)]
         let mut info = Vec::new();
         match read_to_string(path) {
             Ok(s) => {
-                use crate::types::ProcessInfo;
-
                 info = s 
                     .lines()
                     .map(|line| { 
@@ -62,9 +58,22 @@ impl ProcessRegistry {
                         .trim()
                         .parse()
                         .unwrap(),
-                    state: info[2][1]
-                        .trim()
-                        .to_string(),
+                    state: {
+                        let state = info[2][1].trim();
+                        if state.starts_with('R') {
+                            ProcessState::Running
+                        } else if state.starts_with('S') {
+                            ProcessState::InterruptableSleep
+                        } else if state.starts_with('D') {
+                            ProcessState::UninterruptableSleep 
+                        } else if state.starts_with('T') {
+                            ProcessState::Stopped
+                        } else if state.starts_with('Z') {
+                            ProcessState::Zombie
+                        } else {
+                            ProcessState::String(state.to_string())
+                        }
+                    },
                     tgid: info[3][1]
                         .trim()
                         .parse()
@@ -199,43 +208,34 @@ impl ProcessRegistry {
                         .collect(),
                     sig_pnd: info[38][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     shd_pnd: info[39][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     sig_blk: info[40][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     sig_ign: info[41][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     sig_cgt: info[42][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     cap_inh: info[43][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     cap_prm: info[44][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     cap_eff: info[45][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     cap_bnd: info[46][1]
                         .trim()
                         .to_string(),
                     cap_amb: info[47][1]
                         .trim()
-                        .parse()
-                        .unwrap(),
+                        .to_string(),
                     no_new_privs: info[48][1]
                         .trim()
                         .parse()
@@ -293,5 +293,11 @@ impl ProcessRegistry {
             }
             Err(err) => Err(err.to_string())
         }
+    }
+}
+
+impl Default for ProcessRegistry {
+    fn default() -> Self {
+        Self::new()
     }
 }

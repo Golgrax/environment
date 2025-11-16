@@ -21,7 +21,7 @@ unsafe extern "C" {
 
 pub struct ProcessController {
     #[cfg(unix)]
-    process_id: i32
+    pub process_id: i32
 }
 
 impl ProcessController {
